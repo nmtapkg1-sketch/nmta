@@ -6,7 +6,6 @@ const fs = require('fs');
 const multer = require('multer');
 const db = require('./db');
 require('dotenv').config();
-const nodemailer = require('nodemailer');
 const { google } = require('googleapis');
 
 const app = express();
@@ -111,56 +110,54 @@ const oAuth2Client = new google.auth.OAuth2(
 );
 oAuth2Client.setCredentials({ refresh_token: process.env.REFRESH_TOKEN });
 
-// ---------- Send Email Function using Gmail API ----------
+// ---------- Send Email via Gmail API (No SMTP) ----------
 async function sendEmail(to, subject, body) {
-    console.log('📩 Preparing to send email via Gmail API...');
+    console.log('📩 Sending email via Gmail API (HTTPS - Port 443)...');
 
     if (!subject || !body) throw new Error('Subject and body are required');
 
-    let accessToken;
     try {
-        const tokenObj = await oAuth2Client.getAccessToken();
-        accessToken = tokenObj?.token || tokenObj;
-        console.log('🔑 Access token retrieved successfully');
-    } catch (err) {
-        console.error('❌ Failed to get access token:', err);
-        throw err;
-    }
+        // Initialize Gmail API client
+        const gmail = google.gmail({ version: 'v1', auth: oAuth2Client });
 
-    const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            type: 'OAuth2',
-            user: process.env.EMAIL_ADDRESS,
-            clientId: process.env.CLIENT_ID,
-            clientSecret: process.env.CLIENT_SECRET,
-            refreshToken: process.env.REFRESH_TOKEN,
-            accessToken,
-        },
-    });
+        // Create RFC 2822 email format
+        const utf8Subject = `=?utf-8?B?${Buffer.from(subject).toString('base64')}?=`;
+        const messageParts = [
+            `From: NMTA <${process.env.EMAIL_ADDRESS}>`,
+            `To: ${to || process.env.EMAIL_ADDRESS}`,
+            `Subject: ${utf8Subject}`,
+            'MIME-Version: 1.0',
+            'Content-Type: text/html; charset=utf-8',
+            '',
+            body
+        ];
 
-    try {
-        await transporter.verify();
-        console.log('✅ Transporter verified successfully');
-    } catch (err) {
-        console.error('❌ Transporter verification failed:', err);
-        throw err;
-    }
+        const message = messageParts.join('\n');
 
-    const mailOptions = {
-        from: `NMTA <${process.env.EMAIL_ADDRESS}>`,
-        to: to || process.env.EMAIL_ADDRESS,
-        subject,
-        html: body,
-    };
+        // Encode in base64url format (required by Gmail API)
+        const encodedMessage = Buffer.from(message)
+            .toString('base64')
+            .replace(/\+/g, '-')
+            .replace(/\//g, '_')
+            .replace(/=+$/, '');
 
-    try {
-        const info = await transporter.sendMail(mailOptions);
-        console.log('📧 Email sent successfully:', info.response);
-        return info;
-    } catch (err) {
-        console.error('❌ Failed to send email via Gmail API:', err);
-        throw err;
+        // Send via Gmail API
+        const result = await gmail.users.messages.send({
+            userId: 'me',
+            requestBody: {
+                raw: encodedMessage
+            }
+        });
+
+        console.log('✅ Email sent successfully! Message ID:', result.data.id);
+        return { messageId: result.data.id, response: '250 OK' };
+
+    } catch (error) {
+        console.error('❌ Gmail API Error:', error.message);
+        if (error.response) {
+            console.error('Error details:', error.response.data);
+        }
+        throw error;
     }
 }
 
