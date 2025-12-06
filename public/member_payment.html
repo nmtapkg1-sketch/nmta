@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pay Membership Fee - NMTA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="images/nmta_logo_modern.png">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        .payment-container {
+            max-width: 600px;
+            margin: -4rem auto 4rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .payment-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .page-header {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 6rem 0 8rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--secondary-color);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-family: var(--font-sans);
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px var(--accent-light);
+        }
+
+        .form-group input[readonly] {
+            background-color: #f1f5f9;
+            cursor: not-allowed;
+        }
+
+        .btn-block {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: var(--success);
+            margin-bottom: 1rem;
+            animation: scaleIn 0.5s ease;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+            }
+
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .loader {
+            display: none;
+            border: 4px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 4px solid var(--accent-color);
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <a href="index.html" class="logo" style="text-decoration: none;">
+                <img src="images/nmta_logo_modern.png" alt="NMTA Logo" style="height: 40px;">
+                <span>NMTA</span>
+            </a>
+            <nav>
+                <button class="mobile-menu-btn" id="mobile-menu-btn">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div class="nav-links" id="nav-links">
+                    <a href="index.html">Home</a>
+                    <a href="index.html#about">About</a>
+                    <a href="members.html">Members</a>
+                    <a href="financial_history.html">Financials</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="page-header">
+        <div class="container">
+            <h1 style="color: white;">Pay Membership Fee</h1>
+            <p>Secure online payment portal for NMTA members</p>
+        </div>
+    </div>
+
+    <main class="container">
+        <div class="payment-container">
+            <div class="payment-card" id="payment-card">
+                <form id="payment-form">
+                    <div class="form-group">
+                        <label for="member-select">Select Member</label>
+                        <select id="member-select" required>
+                            <option value="">-- Select Your Name --</option>
+                            <!-- Options populated via JS -->
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name">Member Name</label>
+                        <input type="text" id="name" readonly required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="receiptNo">Receipt No (Auto-generated)</label>
+                        <input type="text" id="receiptNo" readonly required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="amount">Amount (₹)</label>
+                        <input type="number" id="amount" step="0.01" required placeholder="Enter amount">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fortheMonth">Payment For (Month/Year)</label>
+                        <input type="text" id="fortheMonth" required placeholder="e.g., January 2025">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="remarks">Remarks (Optional)</label>
+                        <textarea id="remarks" rows="2" placeholder="Any additional notes...">Online Payment</textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block" id="pay-btn">
+                        <span class="btn-text">Pay Now</span>
+                        <div class="loader"></div>
+                    </button>
+                </form>
+
+                <div class="success-message" id="success-message">
+                    <div class="success-icon"><i class="fa-solid fa-circle-check"></i></div>
+                    <h2 style="margin-bottom: 1rem; color: var(--text-main);">Payment Successful!</h2>
+                    <p style="color: var(--text-light); margin-bottom: 2rem;">Thank you for your payment. Your
+                        transaction has been recorded.</p>
+
+                    <button class="btn btn-primary btn-block" id="download-receipt-btn">
+                        <i class="fa-solid fa-file-arrow-down"></i> Download Receipt
+                    </button>
+                    <button class="btn btn-outline btn-block"
+                        style="margin-top: 1rem; border-color: #cbd5e1; color: var(--text-light);"
+                        onclick="location.reload()">
+                        Make Another Payment
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-bottom" style="border: none; padding-top: 0;">
+                <p>&copy; 2025 NMTA Organization. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/member_payment.js"></script>
+    <script src="js/nav.js"></script>
+</body>
+
+</html>

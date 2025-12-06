@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Members - NMTA</title>
+    <title>Financial History - NMTA</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -91,6 +91,11 @@
             color: white;
         }
 
+        .btn-receipt {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
         /* Modal Styles */
         .modal {
             display: none;
@@ -155,10 +160,16 @@
         }
 
         .form-group input:focus,
-        .form-group textarea:focus {
+        .form-group textarea:focus,
+        .form-group select:focus {
             outline: none;
             border-color: var(--accent-color);
             box-shadow: 0 0 0 3px var(--accent-light);
+        }
+
+        .form-group input[readonly] {
+            background-color: #f1f5f9;
+            cursor: not-allowed;
         }
 
         .modal-actions {
@@ -181,6 +192,22 @@
                 transform: scale(1);
             }
         }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .crud-controls {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .page-header {
+                padding: 5rem 0 2rem;
+            }
+        }
     </style>
 </head>
 
@@ -198,8 +225,8 @@
                 <div class="nav-links">
                     <a href="index.html">Home</a>
                     <a href="index.html#about">About</a>
-                    <a href="index.html#executives">Team</a>
-                    <a href="financial_history.html">Financials</a>
+                    <a href="members.html">Members</a>
+                    <a href="financial_history.html" class="active">Financials</a>
                 </div>
             </nav>
         </div>
@@ -207,30 +234,42 @@
 
     <div class="page-header">
         <div class="container">
-            <h1 style="color: white;">Member Management</h1>
-            <p>Add, edit, and manage association members</p>
+            <h1 style="color: white;">Financial History</h1>
+            <p>Manage and track financial records</p>
         </div>
     </div>
 
     <main class="crud-container">
         <div class="crud-controls">
             <div>
-                <h2 style="margin-bottom: 0.5rem;">All Members</h2>
-                <p style="color: var(--text-light);">Manage your community database</p>
+                <h2 style="margin-bottom: 0.5rem;">All Records</h2>
+                <p style="color: var(--text-light);">Track association finances</p>
             </div>
-            <button class="btn btn-primary" id="add-btn"><i class="fa-solid fa-plus"></i> Add New Member</button>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <div class="search-box" style="position: relative;">
+                    <i class="fa-solid fa-search"
+                        style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-light);"></i>
+                    <input type="text" id="searchInput" placeholder="Search records..."
+                        style="padding: 0.75rem 1rem 0.75rem 2.5rem; border: 1px solid #e2e8f0; border-radius: 8px; width: 250px;">
+                </div>
+                <button class="btn btn-outline" id="printHistoryBtn"
+                    style="border-color: var(--primary-color); color: var(--primary-color);"><i
+                        class="fa-solid fa-print"></i> Print History</button>
+                <button class="btn btn-primary" id="add-btn"><i class="fa-solid fa-plus"></i> Add New Record</button>
+            </div>
         </div>
 
         <div class="table-responsive">
-            <table id="members-table">
+            <table id="financial-table">
                 <thead>
                     <tr>
                         <th>ID</th>
                         <th>Name</th>
-                        <th>Business Name</th>
-                        <th>Phone</th>
-                        <th>Shop No</th>
-                        <th>Role/Remarks</th>
+                        <th>Receipt No</th>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>For Month</th>
+                        <th>Remarks</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -242,49 +281,48 @@
     </main>
 
     <!-- Modal -->
-    <div class="modal" id="member-modal">
+    <div class="modal" id="record-modal">
         <div class="modal-content">
-            <h2 id="modal-title" style="margin-bottom: 1.5rem;">Add Member</h2>
-            <form id="member-form">
-                <input type="hidden" id="member-id">
+            <h2 id="modal-title" style="margin-bottom: 1.5rem;">Add Record</h2>
+            <form id="record-form">
+                <input type="hidden" id="record-id">
                 <div class="form-grid">
-                    <div class="form-group">
-                        <label for="name">Full Name</label>
-                        <input type="text" id="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="businessname">Business Name</label>
-                        <input type="text" id="businessname" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="phoneno">Phone Number</label>
-                        <input type="tel" id="phoneno">
-                    </div>
-                    <div class="form-group">
-                        <label for="emailid">Email Address</label>
-                        <input type="email" id="emailid">
-                    </div>
-                    <div class="form-group">
-                        <label for="shopno">Shop Number</label>
-                        <input type="text" id="shopno">
-                    </div>
-                    <div class="form-group">
-                        <label for="remarks">Role / Remarks</label>
-                        <input type="text" id="remarks" placeholder="e.g. Member, Treasurer">
-                    </div>
                     <div class="form-group full-width">
-                        <label for="photo">Photo (Optional)</label>
-                        <div id="photo-preview-container" style="margin-bottom: 10px; display: none;">
-                            <img id="photo-preview" src="" alt="Current Photo"
-                                style="height: 100px; width: 100px; object-fit: cover; border-radius: 50%; border: 2px solid var(--accent-color);">
-                        </div>
-                        <input type="file" id="photo" accept="image/*">
+                        <label for="member-select">Select Member</label>
+                        <select id="member-select" required>
+                            <option value="">-- Select a Member --</option>
+                            <!-- Options will be populated via JS -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Name (Read-only)</label>
+                        <input type="text" id="name" readonly required>
+                    </div>
+                    <div class="form-group">
+                        <label for="receiptNo">Receipt No (Auto-generated)</label>
+                        <input type="text" id="receiptNo" readonly required>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Date</label>
+                        <input type="date" id="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="amount">Amount (₹)</label>
+                        <input type="number" id="amount" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fortheMonth">For Month</label>
+                        <input type="text" id="fortheMonth" placeholder="e.g., January 2025">
+                    </div>
+                    <div class="form-group">
+                        <label for="remarks">Remarks</label>
+                        <input type="text" id="remarks">
                     </div>
                 </div>
                 <div class="modal-actions">
                     <button type="button" class="btn btn-outline" id="cancel-btn"
                         style="color: var(--text-main); border-color: #cbd5e1;">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save Member</button>
+                    <button type="submit" class="btn btn-primary">Save Record</button>
                 </div>
             </form>
         </div>
@@ -298,7 +336,7 @@
         </div>
     </footer>
 
-    <script src="js/members.js"></script>
+    <script src="js/financial_history.js"></script>
     <script src="js/nav.js"></script>
 </body>
 

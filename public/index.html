@@ -1,914 +1,299 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NMTA - New Market Trader's Association</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom CSS -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Add in head section -->
+    <title>NMTA - New Market Traders Association</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bootstrap-4/bootstrap-4.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-    
-    <link rel="icon" type="image/png" href="images/nmta_logo.png">
+    <link rel="icon" type="image/png" href="images/nmta_logo_modern.png">
 
-
- 
 </head>
+
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <header>
         <div class="container">
-            <a class="navbar-brand" href="#">NMTA</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#leadership">Executives</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#gallery">Gallery</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#members">Members</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#testimonials">Testimonials</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#register">Register</a></li>
-                </ul>
-            </div>
+            <a href="index.html" class="logo" style="text-decoration: none;">
+                <img src="images/nmta_logo_modern.png" alt="NMTA Logo" style="height: 50px;">
+                <span>New Market Traders Association</span>
+            </a>
+            <nav>
+                <button class="mobile-menu-btn" id="mobile-menu-btn">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div class="nav-links">
+                    <a href="#about">About</a>
+                    <a href="#president">Leadership</a>
+                    <a href="#executives">Team</a>
+                    <a href="#features">Services</a>
+                    <a href="#contact">Contact</a>
+                    <a href="member_payment.html" class="nav-btn">Pay Fee</a>
+                </div>
+            </nav>
         </div>
-    </nav>
+    </header>
 
-    <!-- Header Carousel -->
-    <header id="home" class="hero-header">
-        <div class="hero-image-container">
-          <img src="images/header_img.jpeg" alt="NMTA Members" class="hero-image">
-          <h1 class="hero-caption">NMTA Members</h1>
-        </div>
-      </header>
-      
-    
-    <marquee behavior="left" style="background-color: yellow; color:black;height:50px;"> This is urgent</marquee>
-
-    <!-- About Section -->
-    <section id="about" class="section-padding">
-        <div class="container">
-            <div class="section-header mb-5">
-                <h2 class="display-5 fw-bold text-center mb-4">About New Market Trader's Association</h2>
-                <p class="lead text-center mb-5"><em>Empowering Commerce, Enriching Community</em></p>
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-bg" style="background-image: url('images/header_img.jpeg');"></div>
+            <div class="hero-overlay"></div>
+            <div class="container hero-content">
+                <h1>Empowering Traders,<br>Building <span class="text-accent">Community</span></h1>
+                <p>The Next Gen Management & Trade Association is dedicated to fostering growth, transparency, and unity
+                    among the business community of Pakyong.</p>
+                <div class="hero-btns">
+                    <a href="#about" class="btn btn-primary">Discover More</a>
+                    <a href="member_payment.html" class="btn btn-cta">Pay Membership Fee</a>
+                </div>
             </div>
-    
-            <div class="row justify-content-center">
-                <div class="col-lg-10">
-                    <div class="about-content">
-                        <h3 class="h4 fw-bold mb-4">Foundational Principles</h3>
-                        <p class="mb-4">Established as the cornerstone of New Market's commercial ecosystem, the New Market Trader's Association (NMTA) stands as a vanguard institution committed to fostering economic excellence and intergenerational prosperity in Pakyong. As a non-profit organization of repute, we orchestrate synergistic partnerships between established enterprises and emerging entrepreneurs, cultivating a progressive business environment that honors tradition while embracing innovation.</p>
-    
-                        <div class="vision-mission mb-5">
-                            <div class="row g-4">
-                                <div class="col-md-6">
-                                    <div class="p-4 bg-light rounded">
-                                        <h4 class="h5 fw-bold mb-3 text-primary">Our Vision</h4>
-                                        <p>To architect a self-sustaining commercial landscape where heritage commerce and modern entrepreneurship coexist in mutual advancement, ensuring New Market's position as Pakyong's premier business destination.</p>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="p-4 bg-light rounded">
-                                        <h4 class="h5 fw-bold mb-3 text-primary">Our Mission</h4>
-                                        <p class="fw-medium mb-2">Preserving Legacy, Building Futures</p>
-                                        <ul class="list-unstyled">
-                                            <li class="mb-2">✓ Policy advocacy & infrastructural modernization</li>
-                                            <li class="mb-2">✓ Financial literacy programs & growth capital access</li>
-                                            <li class="mb-2">✓ Youth entrepreneurship incubation</li>
-                                            <li class="mb-2">✓ Sustainable business practices</li>
-                                            <li>✓ Heritage preservation initiatives</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="about-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>About NMTA</h2>
+                    <p>Our Constitution & Core Objectives</p>
+                </div>
+                <div class="about-content">
+                    <div class="text-center" style="max-width: 800px; margin: 0 auto;">
+                        <p class="mb-2" style="font-size: 1.1rem; line-height: 1.8;">
+                            <strong>Established by the traders of New Market, Pakyong</strong>, the New Market Traders
+                            Association (NMTA) is an independent, non-governmental organization dedicated to the unity,
+                            welfare, and prosperity of the regional business community. We stand committed to serving
+                            our members without political affiliation, driven solely by the goal of collective
+                            advancement.
+                        </p>
+                    </div>
+
+                    <div class="feature-grid">
+                        <div class="about-card">
+                            <div class="icon-box"><i class="fa-solid fa-scale-balanced"></i></div>
+                            <h3>Our Mission</h3>
+                            <p>To safeguard the rights and interests of traders in New Market, Pakyong, creating a fair,
+                                competitive, and ethical business environment for all.</p>
                         </div>
-    
-                        <h3 class="h4 fw-bold mb-4">Intergenerational Commitment</h3>
-                        <div class="row g-4 mb-5">
-                            <div class="col-md-6">
-                                <ul class="list-unstyled">
-                                    <li class="mb-3">
-                                        <h5 class="fw-bold">Future Traders Initiative</h5>
-                                        <p>Apprenticeship programs pairing seasoned merchants with young innovators</p>
-                                    </li>
-                                    <li class="mb-3">
-                                        <h5 class="fw-bold">Legacy Fund</h5>
-                                        <p>Financial instruments ensuring business continuity across generations</p>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-md-6">
-                                <ul class="list-unstyled">
-                                    <li class="mb-3">
-                                        <h5 class="fw-bold">Digital Empowerment Wing</h5>
-                                        <p>Technological upskilling for next-gen commerce</p>
-                                    </li>
-                                    <li>
-                                        <h5 class="fw-bold">Women in Trade Forum</h5>
-                                        <p>Gender-inclusive growth platforms</p>
-                                    </li>
-                                </ul>
-                            </div>
+                        <div class="about-card">
+                            <div class="icon-box"><i class="fa-solid fa-bullseye"></i></div>
+                            <h3>Key Objectives</h3>
+                            <ul style="margin-top: 1rem;">
+                                <li class="mb-1"><i class="fa-solid fa-check text-accent"></i> <strong>Unity:</strong>
+                                    Fostering collaboration to resolve common challenges.</li>
+                                <li class="mb-1"><i class="fa-solid fa-check text-accent"></i> <strong>Growth:</strong>
+                                    Organizing workshops and training for skill enhancement.</li>
+                                <li><i class="fa-solid fa-check text-accent"></i> <strong>Advocacy:</strong> Liaising
+                                    with government bodies on trade matters.</li>
+                            </ul>
                         </div>
-    
-                        <div class="highlight-box bg-primary text-white p-4 rounded mb-5">
-                            <h4 class="h5 fw-bold mb-4">Why NMTA?</h4>
-                            <div class="row g-3">
-                              <div class="col-12 col-sm-6 col-md-3">
-                                <div class="card text-center h-100">
-                                  <div class="card-body">
-                                    <div class="display-6 fw-bold">93%</div>
-                                    <small>Member Retention</small>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="col-12 col-sm-6 col-md-3">
-                                <div class="card text-center h-100">
-                                  <div class="card-body">
-                                    <div class="display-6 fw-bold">45%</div>
-                                    <small>Startup Success Rate</small>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="col-12 col-sm-6 col-md-3">
-                                <div class="card text-center h-100">
-                                  <div class="card-body">
-                                    <div class="display-6 fw-bold">₹30 K</div>
-                                    <small>Funds Mobilized</small>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="col-12 col-sm-6 col-md-3">
-                                <div class="card text-center h-100">
-                                  <div class="card-body">
-                                    <div class="fs-5 fw-bold">Awarded</div>
-                                    <small>By IDCC Pakyong 2022</small>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          
-                          
-    
-                        <blockquote class="blockquote text-center mb-5">
-                            <p class="mb-0 fs-4 fst-italic text-dark">"Commerce With Conscience"</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- President's Message -->
+        <section id="president" class="president-section">
+            <div class="container">
+                <div class="president-container">
+                    <div class="president-img">
+                        <img src="images/president.png" alt="President">
+                    </div>
+                    <div class="president-content">
+                        <div class="section-header" style="text-align: left; margin-bottom: 2rem;">
+                            <h2>President's Message</h2>
+                        </div>
+                        <blockquote>
+                            "At NMTA, we believe that a strong community is built on trust, transparency, and mutual
+                            support. Together, we are not just traders; we are the architects of our region's economic
+                            future. Let us move forward with unity and purpose."
                         </blockquote>
-    
-                        <div class="responsibility-pillars">
-                            <h4 class="h5 fw-bold mb-4">Three Pillars of Responsibility</h4>
-                            <div class="row g-4">
-                                <div class="col-md-4">
-                                    <div class="p-3 border rounded">
-                                        <h5 class="fw-bold text-success">Economic</h5>
-                                        <p class="mb-0">As a trusted pillar of the local economy, NMTA leverages the strength of its member businesses to influence policy, unlock growth opportunities, and elevate New Market's commercial landscape.</p>
-                                        </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="p-3 border rounded">
-                                        <h5 class="fw-bold text-success">Social</h5>
-                                        <p class="mb-0">NMTA envisions a thriving business ecosystem where ethical practices and social responsibility go hand in hand to uplift the broader community.</p>
-                                        
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="p-3 border rounded">
-                                        <h5 class="fw-bold text-success">Environmental</h5>
-                                        <p class="mb-0">Driving sustainable growth through green marketplace initiatives and eco-conscious business practices.</p>
+                        <h3>Geeta Poudyal</h3>
+                        <div class="role">President, NMTA</div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-                                    </div>
-                                </div>
-                            </div>
+        <!-- Impact Stats -->
+        <section class="stats-section">
+            <div class="container">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <h3 id="active-members-count">Loading...</h3>
+                        <p>Active Members</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>25+</h3>
+                        <p>Years of Service</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>100+</h3>
+                        <p>Community Projects</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>50+</h3>
+                        <p>Workshops Organized</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Executives Section -->
+        <section id="executives">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Our Executive Team</h2>
+                    <p>Meet the dedicated individuals leading our association forward.</p>
+                </div>
+                <div id="exec-grid" class="exec-grid">
+                    <!-- Dynamic Content Loading... -->
+                    <div class="exec-card">
+                        <div class="exec-img-wrapper">
+                            <i class="fa-solid fa-user fa-3x text-light"></i>
                         </div>
-    
-                        <div class="cta-box text-center mt-5 pt-4">
-                            <p class="lead">As custodians of New Market's commercial future, NMTA remains unwavering in its commitment to transform individual enterprise into collective prosperity. We invite you to join our movement toward creating an economically vibrant, socially responsible, and intergenerationally sustainable business community.</p>
+                        <div class="exec-info">
+                            <h3>Loading...</h3>
+                            <div class="role">Please Wait</div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Executive Section -->
-
-    <section id="leadership" class="section-padding">
-        <div class="container">
-            <div class="section-header mb-5">
-                <h2 class="display-5 fw-bold text-center mb-3">Executive Leadership</h2>
-                <p class="text-center text-muted">Steering Committee Members</p>
-            </div>
-    
-            <!-- Executive Grid -->
-            <div class="executive-grid">
-                <!-- Row 1 -->
-                <div class="executive-row">
-                <!-- Executive 1 -->
-                    <div class="executive-column">
-                        <div class="executive-card">
-                            <div class="executive-image">
-                                <img src="images/president.png" alt="Chairperson">
-                                <div class="role-badge">president</div>
-                            </div>
-                            <div class="executive-details">
-                                <h3>Geeta Basnett</h3>
-                                <p class="position">President</p>
-                                <div class="executive-contact">
-                                    <a href="tel:+919593884022" class="btn btn-sm btn-outline-primary w-100">
-                                        <i class="fas fa-phone me-2"></i>Call president
-                                    </a>
-                                </div>
-                                <div class="executive-bio">
-                                    <p>25+ years in trade leadership<br>
-                                    Connexion, New Market, Pakyong</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="executive-column">
-                        <div class="executive-card">
-                            <div class="executive-image">
-                                <img src="images/v.president.png" alt="Chairperson">
-                                <div class="role-badge">v.president</div>
-                            </div>
-                            <div class="executive-details">
-                                <h3>Bhim Khatiwara </h3>
-                                <p class="position">Vice President </p>
-                                <div class="executive-contact">
-                                    <a href="tel:+919749883937" class="btn btn-sm btn-outline-primary w-100">
-                                        <i class="fas fa-phone me-2"></i>Call v.p
-                                    </a>
-                                </div>
-                                <div class="executive-bio">
-                                    <p>10+ years in trade leadership<br>
-                                    Ansh Printing, opposite traffic point, New Market, Pakyong</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-    
-                    <div class="executive-column">
-                        <div class="executive-card">
-                            <div class="executive-image">
-                                <img src="images/G.Secretary-I.png" alt="Chairperson">
-                                <div class="role-badge">gs-I</div>
-                            </div>
-                            <div class="executive-details">
-                                <h3>Bijai Chettri</h3>
-                                <p class="position">General Secretary - I</p>
-                                <div class="executive-contact">
-                                    <a href="tel:+919647872119" class="btn btn-sm btn-outline-primary w-100">
-                                        <i class="fas fa-phone me-2"></i>Call g.s-I
-                                    </a>
-                                </div>
-                                <div class="executive-bio">
-                                    <p>10+ years in trade leadership<br>
-                                    Daisy, downstairs to sukhim hardware, New Market, Pakyong</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-    
-                    <div class="executive-column">
-                        <div class="executive-card">
-                            <div class="executive-image">
-                                <img src="images/gs-II.png" alt="Chairperson">
-                                <div class="role-badge">gs-II</div>
-                            </div>
-                            <div class="executive-details">
-                                <h3>Pramila Upreti</h3>
-                                <p class="position">General Secretary-II</p>
-                                <div class="executive-contact">
-                                    <a href="tel:+919563090337" class="btn btn-sm btn-outline-primary w-100">
-                                        <i class="fas fa-phone me-2"></i>Call g.s-II
-                                    </a>
-                                </div>
-                                <div class="executive-bio">
-                                    <p>10+ years in trade leadership<br>
-                                    Ghimeray Store, opposite traffic point, new market, pakyong</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-    
-                    
-                    <!-- Repeat for 3 more executives in the first row -->
+        <!-- Features/Services -->
+        <section id="features" class="features">
+            <div class="container">
+                <div class="section-header">
+                    <h2>What We Do</h2>
+                    <p>Supporting our members with modern tools and transparent management.</p>
                 </div>
-    
-                <!-- Row 2 -->
-                <div class="executive-row">
-                    <!-- Executives 5-8 -->
-                    <div class="executive-column">
-                        <div class="executive-card">
-                            <div class="executive-image">
-                                <img src="images/treasurer-i.png" alt="Chairperson">
-                                <div class="role-badge">treasurer-I</div>
-                            </div>
-                            <div class="executive-details">
-                                <h3>Bhola Nath Bhandari</h3>
-                                <p class="position">Treasurer-I</p>
-                                <div class="executive-contact">
-                                    <a href="tel:+918906779506" class="btn btn-sm btn-outline-primary w-100">
-                                        <i class="fas fa-phone me-2"></i>Call tre-I
-                                    </a>
-                                </div>
-                                <div class="executive-bio">
-                                    <p>15+ years in trade leadership<br>
-                                    Patanjali Store, above SISCO bank, New Markt, Pakyong</p>
-                                </div>
-                            </div>
-                        </div>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="icon-box"><i class="fa-solid fa-users"></i></div>
+                        <h3>Community Support</h3>
+                        <p>We provide a platform for members to connect, share resources, and grow together.</p>
                     </div>
-                    <!-- Executives 5-8 -->
-                    <div class="executive-column">
-                        <div class="executive-card">
-                            <div class="executive-image">
-                                <img src="images/tresurer-II.png" alt="Chairperson">
-                                <div class="role-badge">treasurer-II</div>
-                            </div>
-                            <div class="executive-details">
-                                <h3>Hari Sharma</h3>
-                                <p class="position">Treasurer-II</p>
-                                <div class="executive-contact">
-                                    <a href="tel:+919593772021" class="btn btn-sm btn-outline-primary w-100">
-                                        <i class="fas fa-phone me-2"></i>Call tre-II
-                                    </a>
-                                </div>
-                                <div class="executive-bio">
-                                    <p>10+ years in trade leadership<br>
-                                    Januka Fast Food, near 25-Namcheybung-GPU, hospital road,  Pakyong</p>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="feature-card">
+                        <div class="icon-box"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+                        <h3>Financial Transparency</h3>
+                        <p>All financial records and history are maintained securely and are accessible to members.</p>
                     </div>
-                
+                    <div class="feature-card">
+                        <div class="icon-box"><i class="fa-solid fa-calendar-check"></i></div>
+                        <h3>Events & Meetings</h3>
+                        <p>Regular updates on association meetings, events, and important announcements.</p>
+                    </div>
                 </div>
-               
-               
             </div>
-        </div>
-    </section>
+        </section>
 
-
-    <!-- Gallery Section -->
-    <section id="gallery" class="section-padding bg-light-gray">
-        <div class="container">
-            <h2 class="text-center mb-5">Highlights</h2>
-            <div class="row g-3">
-                <div class="col-md-4 col-6">
+        <!-- Gallery Section -->
+        <section id="gallery" class="gallery-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Community Moments</h2>
+                    <p>Capturing the spirit of unity and progress in New Market.</p>
+                </div>
+                <div class="gallery-grid">
                     <div class="gallery-item">
-                        <img src="images/cd1.jpeg" class="img-fluid w-100 h-auto clickable-image" alt="Gallery Image 1">
+                        <img src="images/gallary/cd1.jpeg" alt="Community Event" class="gallery-img">
+                        <div class="gallery-overlay">
+                            <div class="gallery-info">
+                                <h3>Community Drive</h3>
+                                <p>Coming together for a cleaner market.</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <!-- Repeat for other images -->
-                <div class="col-md-4 col-6">
                     <div class="gallery-item">
-                        <img src="images/cd2.jpeg" class="img-fluid w-100 h-auto clickable-image" alt="Gallery Image 1">
+                        <img src="images/gallary/cd2.jpeg" alt="Market Gathering" class="gallery-img">
+                        <div class="gallery-overlay">
+                            <div class="gallery-info">
+                                <h3>Unity in Action</h3>
+                                <p>Traders discussing future plans.</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <!-- Repeat for other images -->
-                <div class="col-md-4 col-6">
                     <div class="gallery-item">
-                        <img src="images/cd3.jpeg" class="img-fluid w-100 h-auto clickable-image" alt="Gallery Image 1">
+                        <img src="images/gallary/cd3.jpeg" alt="Celebration" class="gallery-img">
+                        <div class="gallery-overlay">
+                            <div class="gallery-info">
+                                <h3>Celebrations</h3>
+                                <p>Joyful moments shared together.</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <!-- Repeat for other images -->
-                <div class="col-md-4 col-6">
                     <div class="gallery-item">
-                        <img src="images/cd4.jpeg" class="img-fluid w-100 h-auto clickable-image" alt="Gallery Image 1">
+                        <img src="images/gallary/cd4.jpeg" alt="Team Work" class="gallery-img">
+                        <div class="gallery-overlay">
+                            <div class="gallery-info">
+                                <h3>Teamwork</h3>
+                                <p>Building a stronger foundation.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <!-- Repeat for other images -->
             </div>
-        </div>
-    </section>
-    <!-- This section will have an enlarged images -->
-        <div class="image-modal">
-            <img class="modal-content" id="expandedImg">
-        </div>
+        </section>
 
-    <!-- Members Section -->
-    <section id="members" class="section-padding">
-        <div class="container">
-            <div class="section-header mb-5">
-                <h2 class="display-5 fw-bold text-center mb-3">Advisors to NMTA</h2>
-                <p class="text-center text-muted">Driving New Market's Commercial Excellence</p>
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <div class="container cta-content">
+                <h2>Ready to Join the Community?</h2>
+                <p>Become a part of NMTA today and contribute to the growth and welfare of our trading community.</p>
+                <a href="#contact" class="btn btn-outline" style="border-color: white; color: white;">Contact Us
+                    Today</a>
             </div>
-    
-            <div class="row g-4">
-                <!-- Member Card -->
-                <div class="col-lg-2 col-md-6 col-6">
-                    <div class="member-card hover-shadow">
-                        <div class="member-header position-relative">
-                            <img src="images/member.png" class="member-img" alt="Computech IT">
-                            <div class="member-overlay">
-                                <div class="social-links">
-                                    <a href="https://wa.me/919090909099" target="_blank" class="whatsapp-link">
-                                        <i class="fab fa-whatsapp"></i> Chat
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body text-center">
-                            <h5 class="card-title fw-bold mb-1">Computech IT</h5>
-                            <p class="text-muted small mb-2">IT Solutions Provider</p>
-                            <div class="member-details">
-                                <p class="mb-1"><i class="fas fa-user-tie me-2"></i>Business Owner Name</p>
-                                <p class="mb-0"><i class="fas fa-map-marker-alt me-2"></i>Shop No. 7, New Market</p>
-                            </div>
-                        </div>
-                        <div class="card-footer bg-light">
-                            <a href="tel:+91000000000" class="btn btn-sm btn-outline-primary w-100">
-                                <i class="fas fa-phone me-2"></i>Call Now
-                            </a>
-                        </div>
-                    </div>
-                   
-                </div>
-    
-                <!-- Repeat other member cards (same structure) -->
-                <div class="col-lg-2 col-md-6 col-6">
-                    <div class="member-card hover-shadow">
-                        <div class="member-header position-relative">
-                            <img src="images/member.png" class="member-img" alt="Placeholder">
-                            <div class="member-overlay">
-                                <div class="social-links">
-                                    <a href="https://wa.me/917872778009" target="_blank" class="whatsapp-link">
-                                        <i class="fab fa-whatsapp"></i> Chat
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body text-center">
-                            <h5 class="card-title fw-bold mb-1">Placeholder</h5>
-                            <p class="text-muted small mb-2">IT Solutions Provider</p>
-                            <div class="member-details">
-                                <p class="mb-1"><i class="fas fa-user-tie me-2"></i>Business Owner Name</p>
-                                <p class="mb-0"><i class="fas fa-map-marker-alt me-2"></i>Shop No. 45, New Market</p>
-                            </div>
-                        </div>
-                        <div class="card-footer bg-light">
-                            <a href="tel:+917872778009" class="btn btn-sm btn-outline-primary w-100">
-                                <i class="fas fa-phone me-2"></i>Call Now
-                            </a>
-                        </div>
-                    </div>
-                   
-                </div>
-    
-                <!-- Repeat other member cards (same structure) -->
-                <div class="col-lg-2 col-md-6 col-6">
-                    <div class="member-card hover-shadow">
-                        <div class="member-header position-relative">
-                            <img src="images/member.png" class="member-img" alt="Placeholder">
-                            <div class="member-overlay">
-                                <div class="social-links">
-                                    <a href="https://wa.me/917872778009" target="_blank" class="whatsapp-link">
-                                        <i class="fab fa-whatsapp"></i> Chat
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body text-center">
-                            <h5 class="card-title fw-bold mb-1">Placeholder</h5>
-                            <p class="text-muted small mb-2">IT Solutions Provider</p>
-                            <div class="member-details">
-                                <p class="mb-1"><i class="fas fa-user-tie me-2"></i>Business Owner Name</p>
-                                <p class="mb-0"><i class="fas fa-map-marker-alt me-2"></i>Shop No. 45, New Market</p>
-                            </div>
-                        </div>
-                        <div class="card-footer bg-light">
-                            <a href="tel:+917872778009" class="btn btn-sm btn-outline-primary w-100">
-                                <i class="fas fa-phone me-2"></i>Call Now
-                            </a>
-                        </div>
-                    </div>
-                   
-                </div>
-    
-                <!-- Repeat other member cards (same structure) -->
-                <div class="col-lg-2 col-md-6 col-6">
-                    <div class="member-card hover-shadow">
-                        <div class="member-header position-relative">
-                            <img src="images/member.png" class="member-img" alt="Placeholder">
-                            <div class="member-overlay">
-                                <div class="social-links">
-                                    <a href="https://wa.me/917872778009" target="_blank" class="whatsapp-link">
-                                        <i class="fab fa-whatsapp"></i> Chat
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body text-center">
-                            <h5 class="card-title fw-bold mb-1">Placeholder</h5>
-                            <p class="text-muted small mb-2">IT Solutions Provider</p>
-                            <div class="member-details">
-                                <p class="mb-1"><i class="fas fa-user-tie me-2"></i>Business Owner Name</p>
-                                <p class="mb-0"><i class="fas fa-map-marker-alt me-2"></i>Shop No. 45, New Market</p>
-                            </div>
-                        </div>
-                        <div class="card-footer bg-light">
-                            <a href="tel:+917872778009" class="btn btn-sm btn-outline-primary w-100">
-                                <i class="fas fa-phone me-2"></i>Call Now
-                            </a>
-                        </div>
-                    </div>
-                   
-                </div>
-                <!-- Repeat other member cards (same structure) -->
-                <div class="col-lg-2 col-md-6 col-6">
-                    <div class="member-card hover-shadow">
-                        <div class="member-header position-relative">
-                            <img src="images/member.png" class="member-img" alt="Placeholder">
-                            <div class="member-overlay">
-                                <div class="social-links">
-                                    <a href="https://wa.me/917872778009" target="_blank" class="whatsapp-link">
-                                        <i class="fab fa-whatsapp"></i> Chat
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body text-center">
-                            <h5 class="card-title fw-bold mb-1">Placeholder</h5>
-                            <p class="text-muted small mb-2">IT Solutions Provider</p>
-                            <div class="member-details">
-                                <p class="mb-1"><i class="fas fa-user-tie me-2"></i>Business Owner Name</p>
-                                <p class="mb-0"><i class="fas fa-map-marker-alt me-2"></i>Shop No. 45, New Market</p>
-                            </div>
-                        </div>
-                        <div class="card-footer bg-light">
-                            <a href="tel:+917872778009" class="btn btn-sm btn-outline-primary w-100">
-                                <i class="fas fa-phone me-2"></i>Call Now
-                            </a>
-                        </div>
-                    </div>
-                   
-                </div>
-                <!-- Repeat other member cards (same structure) -->
-                <div class="col-lg-2 col-md-6 col-6">
-                    <div class="member-card hover-shadow">
-                        <div class="member-header position-relative">
-                            <img src="images/member.png" class="member-img" alt="Computech IT">
-                            <div class="member-overlay">
-                                <div class="social-links">
-                                    <a href="https://wa.me/917872778009" target="_blank" class="whatsapp-link">
-                                        <i class="fab fa-whatsapp"></i> Chat
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body text-center">
-                            <h5 class="card-title fw-bold mb-1">Placeholder</h5>
-                            <p class="text-muted small mb-2">IT Solutions Provider</p>
-                            <div class="member-details">
-                                <p class="mb-1"><i class="fas fa-user-tie me-2"></i>Business Owner Name</p>
-                                <p class="mb-0"><i class="fas fa-map-marker-alt me-2"></i>Shop No. 45, New Market</p>
-                            </div>
-                        </div>
-                        <div class="card-footer bg-light">
-                            <a href="tel:+917872778009" class="btn btn-sm btn-outline-primary w-100">
-                                <i class="fas fa-phone me-2"></i>Call Now
-                            </a>
-                        </div>
-                    </div>
-                   
-                </div>
-    
-                <!-- Repeat other member cards (same structure) -->
+        </section>
+    </main>
 
-            
-            </div>
-        </div>
-    </section>
-    <!-- Testimonials Section -->
-    <section id="testimonials" class="section-padding bg-light-gray">
-        <div class="container">
-            <div class="section-header mb-5">
-                <h2 class="display-5 fw-bold text-center mb-3">Voices of Trust</h2>
-                <p class="text-center text-muted">What Our Community Members Say</p>
-            </div>
-    
-            <div class="row g-4 testimonial-grid">
-                <!-- Testimonial Card 1 -->
-                <div class="col-lg-4 col-md-6">
-                    <div class="testimonial-card hover-shadow">
-                        <div class="card-body p-4">
-                            <div class="testimonial-header d-flex align-items-center mb-4">
-                                <div class="testimonial-avatar">
-                                    <img src="images/member.png" alt="Mr. No Body" class="img-fluid">
-                                </div>
-                                <div class="ms-3">
-                                    <h5 class="mb-0 fw-bold">Mr. Secretary</h5>
-                                    <p class="text-muted small mb-0">General Store Owner</p>
-                                    <div class="rating text-warning small">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <blockquote class="mb-0">
-                                <p class="testimonial-text">"NMTA has revolutionized our business operations through their innovative programs. The market development initiatives have increased footfall by 40% in just six months."</p>
-                                <div class="testimonial-company d-flex align-items-center mt-3">
-                                    <img src="images/nmta_logo.png" alt="Company" class="company-logo me-2">
-                                    <span class="text-muted small">New Market Enterprises</span>
-                                </div>
-                            </blockquote>
-                        </div>
-                    </div>
-                </div>
-    
-                <!-- Testimonial Card 2 -->
-                <div class="col-lg-4 col-md-6">
-                    <div class="testimonial-card hover-shadow">
-                        <div class="card-body p-4">
-                            <div class="testimonial-header d-flex align-items-center mb-4">
-                                <div class="testimonial-avatar">
-                                    <img src="images/testo2.png" alt="Miss Lisa" class="img-fluid">
-                                </div>
-                                <div class="ms-3">
-                                    <h5 class="mb-0 fw-bold">Mrs. President</h5>
-                                    <p class="text-muted small mb-0">Fashion Boutique Owner</p>
-                                    <div class="rating text-warning small">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star-half-alt"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <blockquote class="mb-0">
-                                <p class="testimonial-text">"The digital transformation workshop helped us establish an online presence. We've seen a 300% increase in orders since implementing their strategies."</p>
-                                <div class="testimonial-company d-flex align-items-center mt-3">
-                                    <img src="images/nmta_logo.png" alt="Company" class="company-logo me-2">
-                                    <span class="text-muted small">Fashion Hub</span>
-                                </div>
-                            </blockquote>
-                        </div>
-                    </div>
-                </div>
-    
-                <!-- Testimonial Card 3 -->
-                <div class="col-lg-4 col-md-6">
-                    <div class="testimonial-card hover-shadow">
-                        <div class="card-body p-4">
-                            <div class="testimonial-header d-flex align-items-center mb-4">
-                                <div class="testimonial-avatar">
-                                    <img src="images/testo1.png" alt="Miss Reena" class="img-fluid">
-                                </div>
-                                <div class="ms-3">
-                                    <h5 class="mb-0 fw-bold">Mrs. Secretary</h5>
-                                    <p class="text-muted small mb-0">Young Entrepreneur</p>
-                                    <div class="rating text-warning small">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="far fa-star"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <blockquote class="mb-0">
-                                <p class="testimonial-text">"The startup incubation program gave me the tools and confidence to launch my business. NMTA's mentorship has been invaluable to my success."</p>
-                                <div class="testimonial-company d-flex align-items-center mt-3">
-                                    <img src="images/nmta_logo.png" alt="Company" class="company-logo me-2">
-                                    <span class="text-muted small">Departmental</span>
-                                </div>
-                            </blockquote>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="register" class="section-padding bg-light py-5">
-        <div class="container">
-          <h2 class="text-center mb-5">Member Registration</h2>
-          <div class="row justify-content-center">
-            <div class="col-md-8 col-lg-6">
-              <div class="card shadow rounded-4">
-                <div class="card-body p-4">
-                  <form id="registrationForm" enctype="multipart/form-data">
-                    <div class="mb-3 input-group">
-                      <span class="input-group-text"><i class="fas fa-user"></i></span>
-                      <input type="text" name="memberName" class="form-control" placeholder="Full Name" required maxlength="50">
-                    </div>
-                    <div class="mb-3 input-group">
-                      <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                      <input type="email" name="email" class="form-control" placeholder="Email" required maxlength="150">
-                    </div>
-                    <div class="mb-3 input-group">
-                      <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                      <input type="tel" name="phone" class="form-control" placeholder="Phone Number" required maxlength="10" pattern="\d{10}">
-                    </div>
-                    <div class="mb-3">
-                      <textarea name="businessDetails" class="form-control" rows="4" placeholder="Business Details"></textarea>
-                    </div>
-                    <div class="mb-3">
-                      <label class="form-label">Upload Profile Image</label>
-                      <input type="file" name="profileImage" class="form-control" accept="image/*">
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100">Submit Application</button>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      
-    
     <!-- Footer -->
-    <footer class="py-5">
+    <footer id="contact">
         <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <h5>Contact Us</h5>
-                    <p>New Market, Pakyong<br>Email: info@nmta.org<br>Phone: +91 xxxxxxxxxx</p>
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="logo" style="color: white; margin-bottom: 1rem;">
+                        <img src="images/nmta_logo_modern.png" alt="NMTA Logo" style="height: 40px;">
+                        <span>NMTA</span>
+                    </div>
+                    <p>New Market Traders Association<br>Pakyong, Sikkim</p>
                 </div>
-                <div class="col-md-4">
-                    <h5>Quick Links</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#about" class="text-white">About Us</a></li>
-                        <li><a href="#members" class="text-white">Members</a></li>
-                        <li><a href="#register" class="text-white">Register</a></li>
-                        <li><a href="#" onclick="handlePdfClick(event)" class="text-white">Constitution of NMTA</a></li>
+                <div class="footer-col">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#executives">Our Team</a></li>
+                        <li><a href="#features">Services</a></li>
+                        <li><a href="financial_history.html">Financial History</a></li>
+                        <li><a href="members.html">Manage Members</a></li>
                     </ul>
                 </div>
-                <div class="col-md-4">
-                    <h5>Follow Us</h5>
-                    <div class="social-links">
-                        <a href="#" class="text-white me-2"><i class="fab fa-facebook"></i></a>
-                        <a href="#" class="text-white me-2"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="text-white me-2"><i class="fab fa-instagram"></i></a>
-                    </div>
+                <div class="footer-col">
+                    <h3>Contact Info</h3>
+                    <ul class="footer-links">
+                        <li><i class="fa-solid fa-envelope text-accent"></i> nmtapkg1@gmail.com</li>
+                        <li><i class="fa-solid fa-phone text-accent"></i> +91 9593884022 | 9479883937</li>
+                        <li><i class="fa-solid fa-location-dot text-accent"></i> New Market, Pakyong</li>
+                        <li style="margin-top: 1rem;">
+                            <a href="NMTA Constitution.pdf" download class="text-accent"
+                                style="display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fa-solid fa-file-pdf"></i> Download Constitution
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
-            <div class="text-center mt-4">
-                <p>&copy; 2025 NMTA. All rights reserved.</p>
-                <p>Developed at Computech IT, by (RBPS) team.</p>
+            <div class="footer-bottom">
+                <p>&copy; 2025 NMTA Organization. All rights reserved. | Designed for Community Excellence</p>
             </div>
         </div>
     </footer>
 
-
-
-    <!-- Bootstrap JS and dependencies -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-   
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-
-<script>
-    // Add this JavaScript
-    document.addEventListener('DOMContentLoaded', function() {
-        const images = document.querySelectorAll('.gallery-item img');
-        const modal = document.querySelector('.image-modal');
-        const modalImg = document.getElementById('expandedImg');
-
-        images.forEach(img => {
-            img.addEventListener('click', function(e) {
-                e.stopPropagation();
-                modal.classList.add('active');
-                modalImg.src = this.src;
-            });
-        });
-
-        modal.addEventListener('click', function(e) {
-            if (e.target !== modalImg) {
-                modal.classList.remove('active');
-            }
-        });
-
-        // Close with ESC key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                modal.classList.remove('active');
-            }
-        });
-    });
-</script>
-
-
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const form = document.querySelector('#register form');
-    
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-    
-            const inputs = form.querySelectorAll('input, textarea');
-            const formData = new FormData();
-            formData.append('memberName', inputs[0].value.trim());
-            formData.append('email', inputs[1].value.trim());
-            formData.append('phone', inputs[2].value.trim());
-            formData.append('businessDetails', inputs[3].value.trim());
-    
-            const fileInput = form.querySelector('input[type="file"]');
-            if (fileInput && fileInput.files.length > 0) {
-                const file = fileInput.files[0];
-    
-                // ✅ Image size check (1MB max)
-                if (file.size > 1048576) {
-                    await Swal.fire({
-                        icon: 'warning',
-                        title: 'Image Too Large',
-                        text: 'Please upload an image smaller than 1MB.',
-                        confirmButtonText: 'OK'
-                    });
-                    return; // Stop form submission
-                }
-    
-                formData.append('profileImage', file);
-            }
-    
-            // Show loading
-            const swalInstance = Swal.fire({
-                title: 'Processing...',
-                allowOutsideClick: false,
-                didOpen: () => Swal.showLoading()
-            });
-    
-            const API_URL = window.location.hostname === 'localhost'
-                ? 'http://localhost:3000/register'
-                : 'https://nmta.onrender.com/register';
-    
-            try {
-                // ⚠️ Remove or extend timeout if needed
-                const fetchPromise = fetch(API_URL, {
-                    method: 'POST',
-                    body: formData
-                });
-    
-                // Optional: increase timeout to 30s or remove entirely
-                const timeoutPromise = new Promise((_, reject) =>
-                    setTimeout(() => reject(new Error('Request timed out')), 30000)
-                );
-    
-                const response = await Promise.race([fetchPromise, timeoutPromise]);
-    
-                swalInstance.close();
-    
-                if (!response.ok) {
-                    throw new Error(`Server Error: ${response.status}`);
-                }
-    
-                const result = await response.json();
-                console.log('✅ Server Response:', result);
-    
-                window.location.href = '/payment.html';
-
-    
-                form.reset();
-            } catch (error) {
-                console.error('❌ Error:', error.message);
-                swalInstance.close();
-    
-                await Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: error.message || 'Something went wrong',
-                    confirmButtonText: 'OK'
-                });
-            }
-        });
-    });
-</script>
-
-    <script>
-        function handlePdfClick(event) {
-          event.preventDefault(); // prevent default link behavior
-      
-          const userChoice = confirm("Do you want to download the PDF?\nClick 'Cancel' to open in a new tab.");
-      
-          const pdfPath = "images/constitution_of_NMTA.pdf";
-      
-          if (userChoice) {
-            // Download the file
-            const link = document.createElement("a");
-            link.href = pdfPath;
-            link.download = "NMTA_Constitution.pdf"; // optional custom filename
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-          } else {
-            // Open in new tab
-            window.open(pdfPath, "_blank");
-          }
-        }
-      </script>
-    
-    
+    <script src="js/main.js"></script>
+    <script src="js/nav.js"></script>
 </body>
+
 </html>

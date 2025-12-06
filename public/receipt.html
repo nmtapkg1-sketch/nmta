@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Official Receipt - NMTA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap"
+        rel="stylesheet">
+    <link rel="icon" type="image/png" href="images/nmta_logo_modern.png">
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --accent-color: #b45309;
+            /* Gold/Bronze */
+            --text-main: #334155;
+            --text-light: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 2rem;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .receipt-container {
+            background: white;
+            width: 100%;
+            max-width: 800px;
+            padding: 0;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .receipt-border {
+            border: 8px solid var(--primary-color);
+            margin: 10px;
+            padding: 3rem;
+            position: relative;
+        }
+
+        .watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 8rem;
+            font-weight: 800;
+            color: rgba(0, 0, 0, 0.03);
+            pointer-events: none;
+            z-index: 0;
+            white-space: nowrap;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 3rem;
+            position: relative;
+            z-index: 1;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 1.5rem;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-section img {
+            height: 70px;
+        }
+
+        .org-name h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.75rem;
+            margin: 0;
+            color: var(--primary-color);
+            line-height: 1.1;
+        }
+
+        .org-name p {
+            margin: 0.25rem 0 0;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .receipt-meta {
+            text-align: right;
+        }
+
+        .receipt-label {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin: 0;
+            line-height: 1;
+        }
+
+        .receipt-no {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            color: var(--text-main);
+            margin-top: 0.5rem;
+            font-weight: 600;
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .info-item label {
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .info-item .value {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--primary-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.25rem;
+        }
+
+        .amount-section {
+            background-color: #f8fafc;
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .amount-section::before {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
+            border: 1px dashed var(--border-color);
+            pointer-events: none;
+        }
+
+        .amount-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .amount-value {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .remarks-section {
+            margin-bottom: 4rem;
+        }
+
+        .remarks-section label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-light);
+            text-transform: uppercase;
+        }
+
+        .remarks-text {
+            font-style: italic;
+            color: var(--text-main);
+            margin-top: 0.5rem;
+        }
+
+        .footer {
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            padding-top: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .system-note {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+            font-style: italic;
+        }
+
+        .system-note strong {
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+
+        .timestamp {
+            font-family: 'Courier New', monospace;
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+
+        .print-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+            z-index: 100;
+        }
+
+        .print-btn:hover {
+            transform: translateY(-2px);
+            background: #1e293b;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .receipt-container {
+                box-shadow: none;
+                width: 100%;
+                max-width: 100%;
+            }
+
+            .print-btn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="receipt-container">
+        <div class="receipt-border">
+            <div class="watermark">NMTA OFFICIAL</div>
+
+            <header class="header">
+                <div class="logo-section">
+                    <img src="images/nmta_logo_modern.png" alt="NMTA Logo">
+                    <div class="org-name">
+                        <h1>New Market Traders Association</h1>
+                        <p>Pakyong, Sikkim - 737106</p>
+                    </div>
+                </div>
+                <div class="receipt-meta">
+                    <h2 class="receipt-label">Receipt</h2>
+                    <div class="receipt-no" id="receipt-no">#---</div>
+                </div>
+            </header>
+
+            <div class="content">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <label>Received From</label>
+                        <div class="value" id="payer-name">---</div>
+                    </div>
+                    <div class="info-item">
+                        <label>Date of Payment</label>
+                        <div class="value" id="payment-date">---</div>
+                    </div>
+                    <div class="info-item">
+                        <label>Payment For</label>
+                        <div class="value" id="payment-for">---</div>
+                    </div>
+                    <div class="info-item">
+                        <label>Payment Method</label>
+                        <div class="value">Online / UPI</div>
+                    </div>
+                </div>
+
+                <div class="amount-section">
+                    <div class="amount-label">Amount Paid</div>
+                    <div class="amount-value" id="amount">₹0.00</div>
+                </div>
+
+                <div class="remarks-section">
+                    <label>Remarks / Notes</label>
+                    <div class="remarks-text" id="remarks">None</div>
+                </div>
+            </div>
+
+            <footer class="footer">
+                <p class="system-note">
+                    This is a <strong>System Generated Receipt</strong>. No signature is required.
+                </p>
+                <p class="timestamp">Generated on: <span id="generated-date"></span></p>
+            </footer>
+        </div>
+    </div>
+
+    <button class="print-btn" onclick="window.print()">Print Receipt</button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+
+            document.getElementById('receipt-no').textContent = '#' + (params.get('receiptNo') || '---');
+            document.getElementById('payer-name').textContent = params.get('name') || '---';
+            document.getElementById('payment-date').textContent = params.get('date') || '---';
+            document.getElementById('payment-for').textContent = params.get('fortheMonth') || 'Membership Fee';
+            document.getElementById('amount').textContent = '₹' + parseFloat(params.get('amount') || 0).toFixed(2);
+            document.getElementById('remarks').textContent = params.get('remarks') || 'None';
+
+            const now = new Date();
+            document.getElementById('generated-date').textContent = now.toLocaleString();
+        });
+    </script>
+</body>
+
+</html>
