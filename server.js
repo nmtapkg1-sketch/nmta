@@ -27,7 +27,7 @@ const upload = multer({ storage });
 
 // ---------- DB Error Handler ----------
 const handleDbError = (res, err) => {
-    console.error(err);
+    console.error('DB Error:', err);
     res.status(500).json({ error: err.message });
 };
 
@@ -57,7 +57,6 @@ const createCrudRoutes = (tableName) => {
         const placeholders = keys.map(() => '?').join(',');
 
         const sql = `INSERT INTO ${tableName} (${keys.join(',')}) VALUES (${placeholders})`;
-
         db.run(sql, values, function (err) {
             if (err) return handleDbError(res, err);
             res.json({ id: this.lastID, ...data });
@@ -73,7 +72,6 @@ const createCrudRoutes = (tableName) => {
         const setClause = keys.map(key => `${key} = ?`).join(',');
 
         const sql = `UPDATE ${tableName} SET ${setClause} WHERE id = ?`;
-
         db.run(sql, [...values, req.params.id], function (err) {
             if (err) return handleDbError(res, err);
             res.json({ message: 'Updated successfully', changes: this.changes });
@@ -105,7 +103,7 @@ app.post('/api/sync-from-json', (req, res) => {
     });
 });
 
-// ---------- Gmail OAuth2 Email Setup ----------
+// ---------- Gmail API OAuth2 Setup ----------
 const oAuth2Client = new google.auth.OAuth2(
     process.env.CLIENT_ID,
     process.env.CLIENT_SECRET,
@@ -113,12 +111,21 @@ const oAuth2Client = new google.auth.OAuth2(
 );
 oAuth2Client.setCredentials({ refresh_token: process.env.REFRESH_TOKEN });
 
-// ---------- Send Email Function ----------
+// ---------- Send Email Function using Gmail API ----------
 async function sendEmail(to, subject, body) {
+    console.log('📩 Preparing to send email via Gmail API...');
+
     if (!subject || !body) throw new Error('Subject and body are required');
 
-    const accessTokenObj = await oAuth2Client.getAccessToken();
-    const accessToken = accessTokenObj?.token || accessTokenObj;
+    let accessToken;
+    try {
+        const tokenObj = await oAuth2Client.getAccessToken();
+        accessToken = tokenObj?.token || tokenObj;
+        console.log('🔑 Access token retrieved successfully');
+    } catch (err) {
+        console.error('❌ Failed to get access token:', err);
+        throw err;
+    }
 
     const transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -132,6 +139,14 @@ async function sendEmail(to, subject, body) {
         },
     });
 
+    try {
+        await transporter.verify();
+        console.log('✅ Transporter verified successfully');
+    } catch (err) {
+        console.error('❌ Transporter verification failed:', err);
+        throw err;
+    }
+
     const mailOptions = {
         from: `NMTA <${process.env.EMAIL_ADDRESS}>`,
         to: to || process.env.EMAIL_ADDRESS,
@@ -139,25 +154,43 @@ async function sendEmail(to, subject, body) {
         html: body,
     };
 
-    const info = await transporter.sendMail(mailOptions);
-    console.log('📧 Email sent:', info.response);
-    return info;
+    try {
+        const info = await transporter.sendMail(mailOptions);
+        console.log('📧 Email sent successfully:', info.response);
+        return info;
+    } catch (err) {
+        console.error('❌ Failed to send email via Gmail API:', err);
+        throw err;
+    }
 }
 
 // ---------- API Endpoint to Send Email ----------
 app.post('/api/send-email', async (req, res) => {
     const { to, subject, body } = req.body;
-
     try {
         const info = await sendEmail(to, subject, body);
         res.json({ message: 'Email sent successfully', info: info.response });
     } catch (err) {
-        console.error('❌ Error sending email:', err);
         res.status(500).json({ error: 'Failed to send email', details: err.message });
     }
 });
 
-// ---------- OAuth2 Callback (Optional) ----------
+// ---------- Temporary Test Email Route ----------
+app.get('/test-email', async (req, res) => {
+    try {
+        const info = await sendEmail(
+            process.env.EMAIL_ADDRESS,
+            'Test Email from Production Server',
+            '<p>This is a test email from live production server using Gmail API.</p>'
+        );
+        res.send(`✅ Email sent! Response: ${info.response}`);
+    } catch (err) {
+        console.error('❌ Test email failed:', err);
+        res.status(500).send(`❌ Failed to send email: ${err.message}`);
+    }
+});
+
+// ---------- OAuth2 Callback Route ----------
 app.get('/oauth2callback', async (req, res) => {
     try {
         const code = req.query.code;
@@ -167,7 +200,7 @@ app.get('/oauth2callback', async (req, res) => {
         console.log('✅ Tokens received:', tokens);
 
         res.send(`<h3>Tokens received! Check your console.</h3>
-                  <p>Refresh Token: ${tokens.refresh_token}</p>`);
+              <p>Refresh Token: ${tokens.refresh_token}</p>`);
     } catch (err) {
         console.error('❌ Error getting tokens:', err);
         res.status(500).send('Error getting tokens. Check console.');
@@ -177,4 +210,6 @@ app.get('/oauth2callback', async (req, res) => {
 // ---------- Start Server ----------
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
+    console.log('Connected to the SQLite database.');
+    console.log(`Available at your primary URL: ${process.env.REDIRECT_URI.replace('/oauth2callback', '')}`);
 });
