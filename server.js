@@ -120,13 +120,21 @@ app.post('/api/send-email', async (req, res) => {
     console.log('Email User:', process.env.EMAIL_USER);
     console.log('Email Pass Length:', process.env.EMAIL_PASS ? process.env.EMAIL_PASS.length : 'undefined');
 
-    // Create Transporter
+    // Create Transporter with explicit configuration
     const transporter = nodemailer.createTransport({
-        service: 'gmail',
+        host: 'smtp.gmail.com',
+        port: 587,
+        secure: false, // use TLS
         auth: {
             user: process.env.EMAIL_USER,
             pass: process.env.EMAIL_PASS
-        }
+        },
+        tls: {
+            rejectUnauthorized: false
+        },
+        connectionTimeout: 10000, // 10 seconds
+        greetingTimeout: 10000,
+        socketTimeout: 10000
     });
 
     const mailOptions = {
@@ -137,6 +145,11 @@ app.post('/api/send-email', async (req, res) => {
     };
 
     try {
+        // Verify transporter configuration
+        console.log('Verifying SMTP connection...');
+        await transporter.verify();
+        console.log('SMTP connection verified successfully');
+
         const info = await transporter.sendMail(mailOptions);
         console.log('Email sent successfully:', info.response);
         res.json({ message: 'Email sent successfully', info: info.response });
