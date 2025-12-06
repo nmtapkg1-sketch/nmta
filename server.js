@@ -115,10 +115,10 @@ app.post('/api/send-email', async (req, res) => {
     const { to, subject, body } = req.body;
 
     console.log('--- Email Request Received ---');
-    // console.log('To:', to || process.env.EMAIL_USER);
-    // console.log('Subject:', subject);
-    // console.log('Email User:', process.env.EMAIL_USER);
-    // console.log('Email Pass Length:', process.env.EMAIL_PASS ? process.env.EMAIL_PASS.length : 'undefined');
+    console.log('To:', to || process.env.EMAIL_USER);
+    console.log('Subject:', subject);
+    console.log('Email User:', process.env.EMAIL_USER);
+    console.log('Email Pass Length:', process.env.EMAIL_PASS ? process.env.EMAIL_PASS.length : 'undefined');
 
     // Create Transporter
     const transporter = nodemailer.createTransport({
