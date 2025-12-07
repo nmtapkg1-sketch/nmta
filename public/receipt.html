@@ -684,6 +684,9 @@
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
     <script>
         // Number to words converter
         function numberToWords(num) {
@@ -748,30 +751,253 @@
             });
         });
 
-        // PDF Download Function
+
         function downloadPDF() {
-            const receiptNo = document.getElementById('receipt-no').textContent.replace('#', '');
+            const receiptNo = document.getElementById('receipt-no').textContent;
             const filename = `NMTA_Receipt_${receiptNo}.pdf`;
 
-            const element = document.querySelector('.receipt-container');
-            const buttons = document.querySelector('.action-buttons');
+            try {
+                // Get data from the page
+                const payerName = document.getElementById('payer-name').textContent;
+                const paymentDate = document.getElementById('payment-date').textContent;
+                const paymentFor = document.getElementById('payment-for').textContent;
+                const amount = document.getElementById('amount').textContent;
+                const amountWords = document.getElementById('amount-words').textContent;
+                const remarks = document.getElementById('remarks').textContent;
+                const generatedDate = document.getElementById('generated-date').textContent;
 
-            // Hide buttons before generating PDF
-            buttons.style.display = 'none';
+                // Initialize jsPDF
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: 'a4',
+                    compress: true
+                });
 
-            const opt = {
-                margin: 10,
-                filename: filename,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true, logging: false },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
+                const pageWidth = 210;
+                const pageHeight = 297;
+                const margin = 25;
+                const contentWidth = pageWidth - (2 * margin);
 
-            html2pdf().set(opt).from(element).save().then(() => {
-                // Show buttons again after PDF is generated
-                buttons.style.display = 'flex';
-            });
+                // ========== HEADER SECTION ==========
+                // Dark blue header background
+                pdf.setFillColor(0, 43, 92);
+                pdf.rect(0, 0, pageWidth, 65, 'F');
+
+                // Company name
+                pdf.setTextColor(255, 255, 255);
+                pdf.setFontSize(24);
+                pdf.setFont('helvetica', 'bold');
+                pdf.text('New Market Traders Association', pageWidth / 2, 25, { align: 'center' });
+
+                // Address
+                pdf.setFontSize(11);
+                pdf.setFont('helvetica', 'normal');
+                pdf.text('Pakyong, Sikkim - 737106', pageWidth / 2, 34, { align: 'center' });
+
+                // Official Receipt label with border
+                pdf.setDrawColor(255, 255, 255);
+                pdf.setLineWidth(0.5);
+                pdf.rect(pageWidth / 2 - 25, 42, 50, 10, 'S');
+                pdf.setFontSize(10);
+                pdf.setFont('helvetica', 'bold');
+                pdf.text('OFFICIAL RECEIPT', pageWidth / 2, 48.5, { align: 'center' });
+
+                // ========== RECEIPT NUMBER BAR ==========
+                let yPos = 75;
+
+                pdf.setFillColor(14, 165, 233);
+                pdf.rect(0, yPos, pageWidth, 20, 'F');
+
+                pdf.setTextColor(255, 255, 255);
+                pdf.setFontSize(11);
+                pdf.setFont('helvetica', 'bold');
+                pdf.text('Receipt Number:', margin, yPos + 8);
+
+                pdf.setFontSize(13);
+                pdf.text(receiptNo, margin, yPos + 15);
+
+                // PAID status
+                pdf.setFillColor(16, 185, 129);
+                pdf.circle(pageWidth - margin - 5, yPos + 10, 4, 'F');
+                pdf.setFontSize(11);
+                pdf.text('PAID', pageWidth - margin - 20, yPos + 12);
+
+                yPos = 105;
+
+                // ========== CONTENT SECTION ==========
+
+                // Horizontal line separator
+                pdf.setDrawColor(220, 220, 220);
+                pdf.setLineWidth(0.3);
+                pdf.line(margin, yPos, pageWidth - margin, yPos);
+
+                yPos += 10;
+
+                // Grid layout for information
+                const col1X = margin;
+                const col2X = pageWidth / 2 + 5;
+                const labelColor = [100, 116, 139];
+                const valueColor = [30, 41, 59];
+
+                // Row 1: Received From & Payment Date
+                pdf.setTextColor(labelColor[0], labelColor[1], labelColor[2]);
+                pdf.setFontSize(9);
+                pdf.setFont('helvetica', 'bold');
+                pdf.text('RECEIVED FROM', col1X, yPos);
+                pdf.text('PAYMENT DATE', col2X, yPos);
+
+                pdf.setTextColor(valueColor[0], valueColor[1], valueColor[2]);
+                pdf.setFontSize(12);
+                pdf.setFont('helvetica', 'bold');
+                pdf.text(payerName, col1X, yPos + 7);
+                pdf.text(paymentDate, col2X, yPos + 7);
+
+                yPos += 22;
+
+                // Row 2: Payment For & Payment Method
+                pdf.setTextColor(labelColor[0], labelColor[1], labelColor[2]);
+                pdf.setFontSize(9);
+                pdf.setFont('helvetica', 'bold');
+                pdf.text('PAYMENT FOR', col1X, yPos);
+                pdf.text('PAYMENT METHOD', col2X, yPos);
+
+                pdf.setTextColor(valueColor[0], valueColor[1], valueColor[2]);
+                pdf.setFontSize(12);
+                pdf.setFont('helvetica', 'bold');
+                pdf.text(paymentFor, col1X, yPos + 7);
+                pdf.text('Online / UPI', col2X, yPos + 7);
+
+                yPos += 20;
+
+                // Horizontal line separator
+                pdf.setDrawColor(220, 220, 220);
+                pdf.line(margin, yPos, pageWidth - margin, yPos);
+
+                yPos += 15;
+
+                // ========== AMOUNT SECTION (HIGHLIGHTED) ==========
+
+                // Light blue background box
+                pdf.setFillColor(240, 249, 255);
+                pdf.setDrawColor(14, 165, 233);
+                pdf.setLineWidth(1.5);
+                pdf.roundedRect(margin, yPos, contentWidth, 50, 5, 5, 'FD');
+
+                // Amount label
+                pdf.setTextColor(100, 116, 139);
+                pdf.setFontSize(10);
+                pdf.setFont('helvetica', 'bold');
+                pdf.text('AMOUNT PAID', pageWidth / 2, yPos + 12, { align: 'center' });
+
+                // Amount value (large and bold)
+                pdf.setTextColor(0, 43, 92);
+                pdf.setFontSize(32);
+                pdf.setFont('helvetica', 'bold');
+                // Replace ₹ symbol with Rs. for PDF compatibility
+                const amountText = amount.replace('₹', 'Rs. ');
+                pdf.text(amountText, pageWidth / 2, yPos + 28, { align: 'center' });
+
+                // Amount in words
+                pdf.setTextColor(71, 85, 105);
+                pdf.setFontSize(9);
+                pdf.setFont('helvetica', 'italic');
+                pdf.text(amountWords, pageWidth / 2, yPos + 40, { align: 'center' });
+
+                yPos += 60;
+
+                // ========== REMARKS SECTION ==========
+
+                if (remarks && remarks !== 'None') {
+                    pdf.setDrawColor(220, 220, 220);
+                    pdf.setLineWidth(0.3);
+                    pdf.roundedRect(margin, yPos, contentWidth, 20, 3, 3, 'S');
+
+                    pdf.setTextColor(100, 116, 139);
+                    pdf.setFontSize(9);
+                    pdf.setFont('helvetica', 'bold');
+                    pdf.text('REMARKS', margin + 5, yPos + 7);
+
+                    pdf.setTextColor(30, 41, 59);
+                    pdf.setFontSize(10);
+                    pdf.setFont('helvetica', 'normal');
+                    const remarksText = pdf.splitTextToSize(remarks, contentWidth - 10);
+                    pdf.text(remarksText, margin + 5, yPos + 13);
+
+                    yPos += 30;
+                }
+
+                // ========== FOOTER SECTION ==========
+
+                yPos = pageHeight - 45;
+
+                // Footer background
+                pdf.setFillColor(248, 250, 252);
+                pdf.rect(0, yPos, pageWidth, 45, 'F');
+
+                // Separator line
+                pdf.setDrawColor(220, 220, 220);
+                pdf.setLineWidth(0.5);
+                pdf.line(0, yPos, pageWidth, yPos);
+
+                yPos += 12;
+
+                // System generated text
+                pdf.setTextColor(30, 41, 59);
+                pdf.setFontSize(10);
+                pdf.setFont('helvetica', 'bold');
+                pdf.text('This is a system-generated receipt and does not require a signature.', pageWidth / 2, yPos, { align: 'center' });
+
+                yPos += 8;
+
+                // Generated date
+                pdf.setTextColor(100, 116, 139);
+                pdf.setFontSize(9);
+                pdf.setFont('helvetica', 'normal');
+                pdf.text('Generated on: ' + generatedDate, pageWidth / 2, yPos, { align: 'center' });
+
+                yPos += 10;
+
+                // Thank you message
+                pdf.setFontSize(9);
+                pdf.setFont('helvetica', 'italic');
+                pdf.text('Thank you for your payment!', pageWidth / 2, yPos, { align: 'center' });
+
+                // ========== WATERMARK ==========
+
+                pdf.setGState(new pdf.GState({ opacity: 0.05 }));
+                pdf.setTextColor(0, 0, 0);
+                pdf.setFontSize(80);
+                pdf.setFont('helvetica', 'bold');
+                pdf.text('NMTA', pageWidth / 2, pageHeight / 2, {
+                    align: 'center',
+                    angle: 45
+                });
+
+                // ========== BORDER (Optional decorative element) ==========
+
+                pdf.setGState(new pdf.GState({ opacity: 1 }));
+                pdf.setDrawColor(0, 43, 92);
+                pdf.setLineWidth(0.5);
+                pdf.rect(5, 5, pageWidth - 10, pageHeight - 10, 'S');
+
+                // Save the PDF
+                pdf.save(filename);
+
+                console.log('PDF downloaded successfully - Professional design');
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                alert('Error generating PDF: ' + error.message);
+            }
         }
+
+        // Alternative: Save as PDF with better print styles
+        function savePDF() {
+            downloadPDF();
+        }
+
+
     </script>
 </body>
 
