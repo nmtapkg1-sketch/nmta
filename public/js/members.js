@@ -5,8 +5,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const addBtn = document.getElementById('add-btn');
     const cancelBtn = document.getElementById('cancel-btn');
     const modalTitle = document.getElementById('modal-title');
+    const totalMembersSpan = document.getElementById('total-members');
 
     const API_URL = '/api/members';
+
+    // Helper to update member count
+    function updateTotalMembers(count) {
+        totalMembersSpan.textContent = count;
+    }
 
     // Fetch and display members
     async function fetchMembers() {
@@ -14,9 +20,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch(API_URL);
             const data = await response.json();
             renderTable(data);
+            updateTotalMembers(data.length); // update count on fetch
+            return data; // return members for live updates
         } catch (error) {
             console.error('Error fetching members:', error);
             tableBody.innerHTML = '<tr><td colspan="7" class="text-center">Error loading members</td></tr>';
+            updateTotalMembers(0);
+            return [];
         }
     }
 
@@ -79,7 +89,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     cancelBtn.addEventListener('click', closeModal);
 
-    // Close modal on outside click
     modal.addEventListener('click', (e) => {
         if (e.target === modal) closeModal();
     });
@@ -89,7 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         const id = document.getElementById('member-id').value;
 
-        // Use FormData for file upload support
         const formData = new FormData();
         formData.append('name', document.getElementById('name').value);
         formData.append('businessname', document.getElementById('businessname').value);
@@ -99,24 +107,18 @@ document.addEventListener('DOMContentLoaded', () => {
         formData.append('remarks', document.getElementById('remarks').value);
 
         const photoInput = document.getElementById('photo');
-        if (photoInput.files[0]) {
-            formData.append('photo', photoInput.files[0]);
-        }
+        if (photoInput.files[0]) formData.append('photo', photoInput.files[0]);
 
         try {
             const method = id ? 'PUT' : 'POST';
             const url = id ? `${API_URL}/${id}` : API_URL;
 
-            // Note: Don't set Content-Type header when sending FormData, 
-            // the browser sets it automatically with the boundary
-            const response = await fetch(url, {
-                method: method,
-                body: formData
-            });
+            const response = await fetch(url, { method, body: formData });
 
             if (response.ok) {
                 closeModal();
-                fetchMembers();
+                const members = await fetchMembers(); // live update
+                updateTotalMembers(members.length);
                 Swal.fire({
                     icon: 'success',
                     title: 'Success',
@@ -148,7 +150,6 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('shopno').value = member.shopno;
             document.getElementById('remarks').value = member.remarks;
 
-            // Handle photo preview
             const photoPreview = document.getElementById('photo-preview');
             const photoContainer = document.getElementById('photo-preview-container');
             if (member.photo) {
@@ -167,7 +168,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Delete member
-    // Delete member
     async function deleteMember(id) {
         const result = await Swal.fire({
             title: 'Are you sure?',
@@ -181,32 +181,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (result.isConfirmed) {
             try {
-                const response = await fetch(`${API_URL}/${id}`, {
-                    method: 'DELETE'
-                });
+                const response = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
 
                 if (response.ok) {
-                    await Swal.fire(
-                        'Deleted!',
-                        'Member has been deleted.',
-                        'success'
-                    );
-                    fetchMembers();
+                    await Swal.fire('Deleted!', 'Member has been deleted.', 'success');
+                    const members = await fetchMembers(); // live update
+                    updateTotalMembers(members.length);
                 } else {
                     console.error('Error deleting member');
-                    Swal.fire(
-                        'Error!',
-                        'Failed to delete member.',
-                        'error'
-                    );
+                    Swal.fire('Error!', 'Failed to delete member.', 'error');
                 }
             } catch (error) {
                 console.error('Error deleting member:', error);
-                Swal.fire(
-                    'Error!',
-                    'An error occurred while deleting.',
-                    'error'
-                );
+                Swal.fire('Error!', 'An error occurred while deleting.', 'error');
             }
         }
     }

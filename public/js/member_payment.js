@@ -198,7 +198,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // Subtext
             pdf.setFontSize(10);
             pdf.setTextColor(120, 120, 120);
-            pdf.text("Pakyong, Sikkim - 737106", pageWidth / 2, 30, { align: "center" });
+            pdf.text("Regd No: 123456789", pageWidth / 2, 30, { align: "center" });
+            pdf.text("Pakyong, Sikkim - 737106", pageWidth / 2, 35, { align: "center" });
 
             pdf.setDrawColor(230, 230, 230);
             pdf.line(margin, 48, pageWidth - margin, 48);

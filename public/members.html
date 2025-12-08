@@ -31,11 +31,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 2rem;
+            margin-bottom: 1rem;
             background: white;
             padding: 1.5rem;
             border-radius: var(--border-radius);
             box-shadow: var(--shadow-sm);
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
         .table-responsive {
@@ -48,14 +50,15 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 800px;
+            min-width: 700px;
         }
 
         th,
         td {
-            padding: 1rem 1.5rem;
+            padding: 0.8rem 1rem;
             text-align: left;
             border-bottom: 1px solid #e2e8f0;
+            vertical-align: middle;
         }
 
         th {
@@ -90,6 +93,35 @@
         .btn-delete {
             background-color: #ef4444;
             color: white;
+        }
+
+        .search-box {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-box input {
+            padding: 0.6rem 0.8rem 0.6rem 2.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            width: 220px;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .member-photo-inline {
+            height: 40px;
+            width: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--accent-color);
+            margin-right: 0.5rem;
+            vertical-align: middle;
         }
 
         /* Modal Styles */
@@ -156,10 +188,16 @@
         }
 
         .form-group input:focus,
-        .form-group textarea:focus {
+        .form-group textarea:focus,
+        .form-group select:focus {
             outline: none;
             border-color: var(--accent-color);
             box-shadow: 0 0 0 3px var(--accent-light);
+        }
+
+        .form-group input[readonly] {
+            background-color: #f1f5f9;
+            cursor: not-allowed;
         }
 
         .modal-actions {
@@ -180,6 +218,35 @@
             to {
                 opacity: 1;
                 transform: scale(1);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .crud-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-box input {
+                width: 100%;
+            }
+
+            table {
+                min-width: 0;
+                font-size: 0.85rem;
+            }
+
+            th,
+            td {
+                padding: 0.5rem;
+            }
+
+            .actions {
+                flex-wrap: wrap;
             }
         }
     </style>
@@ -216,10 +283,16 @@
     <main class="crud-container">
         <div class="crud-controls">
             <div>
-                <h2 style="margin-bottom: 0.5rem;">All Members</h2>
-                <p style="color: var(--text-light);">Manage your community database</p>
+                <h2 style="margin-bottom: 0.5rem;">Total Registered Members: <span id="total-members"
+                        style="font-weight: normal; color: var(--text-light);"></span></h2>
             </div>
-            <button class="btn btn-primary" id="add-btn"><i class="fa-solid fa-plus"></i> Add New Member</button>
+            <div style="display:flex; gap:1rem; flex-wrap:wrap; align-items:center;">
+                <div class="search-box">
+                    <i class="fa-solid fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search by name, business, shop no...">
+                </div>
+                <button class="btn btn-primary" id="add-btn"><i class="fa-solid fa-plus"></i> Add New Member</button>
+            </div>
         </div>
 
         <div class="table-responsive">
@@ -236,7 +309,51 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Data will be populated here -->
+                    <tr>
+                        <td>2</td>
+                        <td><img class="member-photo-inline" src="images/user2.jpg" alt="Bob Brown"
+                                onerror="this.onerror=null;this.src='images/default-avatar.png';">Bob Brown</td>
+                        <td>Bob's Hardware</td>
+                        <td>5544332211</td>
+                        <td>D-404</td>
+                        <td>Active Member</td>
+                        <td>
+                            <div class="actions">
+                                <button class="btn btn-edit btn-sm"><i class="fa-solid fa-pen"></i></button>
+                                <button class="btn btn-delete btn-sm"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td><img class="member-photo-inline" src="images/user1.jpg" alt="Satish Pradhan"
+                                onerror="this.onerror=null;this.src='images/default-avatar.png';">Satish Pradhan</td>
+                        <td>Computech IT</td>
+                        <td>7872778009</td>
+                        <td>102</td>
+                        <td>Active Member</td>
+                        <td>
+                            <div class="actions">
+                                <button class="btn btn-edit btn-sm"><i class="fa-solid fa-pen"></i></button>
+                                <button class="btn btn-delete btn-sm"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td><img class="member-photo-inline" src="" alt="No Photo"
+                                onerror="this.onerror=null;this.src='images/default-avatar.png';">John Doe</td>
+                        <td>JD Supplies</td>
+                        <td>9988776655</td>
+                        <td>201</td>
+                        <td>Active Member</td>
+                        <td>
+                            <div class="actions">
+                                <button class="btn btn-edit btn-sm"><i class="fa-solid fa-pen"></i></button>
+                                <button class="btn btn-delete btn-sm"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -259,7 +376,7 @@
                     </div>
                     <div class="form-group">
                         <label for="phoneno">Phone Number</label>
-                        <input type="tel" id="phoneno">
+                        <input type="tel" id="phoneno" maxlength="10">
                     </div>
                     <div class="form-group">
                         <label for="emailid">Email Address</label>
@@ -267,11 +384,17 @@
                     </div>
                     <div class="form-group">
                         <label for="shopno">Shop Number</label>
-                        <input type="text" id="shopno">
+                        <input type="text" id="shopno" maxlength="10">
                     </div>
                     <div class="form-group">
                         <label for="remarks">Role / Remarks</label>
-                        <input type="text" id="remarks" placeholder="e.g. Member, Treasurer">
+                        <select size="1" id="remarks">
+                            <option value="Member">Member</option>
+                            <option value="Treasurer">Treasurer</option>
+                            <option value="Secretary">Secretary</option>
+                            <option value="Vice President">Vice President</option>
+                            <option value="President">President</option>
+                        </select>
                     </div>
                     <div class="form-group full-width">
                         <label for="photo">Photo (Optional)</label>
@@ -302,6 +425,29 @@
     <script src="js/image-modal.js"></script>
     <script src="js/members.js"></script>
     <script src="js/nav.js"></script>
+    <script>
+        // Search / Filter functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('searchInput');
+            const membersTable = document.getElementById('members-table').getElementsByTagName('tbody')[0];
+
+            searchInput.addEventListener('input', () => {
+                const filter = searchInput.value.toLowerCase();
+
+                Array.from(membersTable.rows).forEach(row => {
+                    const name = row.cells[1]?.textContent.toLowerCase() || '';
+                    const business = row.cells[2]?.textContent.toLowerCase() || '';
+                    const shop = row.cells[4]?.textContent.toLowerCase() || '';
+
+                    if (name.includes(filter) || business.includes(filter) || shop.includes(filter)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

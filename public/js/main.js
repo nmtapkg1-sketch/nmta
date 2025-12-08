@@ -2,11 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadExecutives();
     loadMemberCount();
 
-    // Login Button Placeholder
-    document.getElementById('login-btn').addEventListener('click', (e) => {
-        e.preventDefault();
-        alert('Member Portal Access Coming Soon');
-    });
+
 });
 
 async function loadExecutives() {

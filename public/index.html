@@ -32,7 +32,7 @@
                     <a href="#executives">Team</a>
                     <a href="#features">Services</a>
                     <a href="#contact">Contact</a>
-                    <a href="member_payment.html" class="nav-btn">Pay Fee</a>
+                    <a href="member_payment.html" class="nav-btn">Make Payment</a>
                 </div>
             </nav>
         </div>
@@ -45,7 +45,7 @@
             <div class="hero-overlay"></div>
             <div class="container hero-content">
                 <h1>Empowering Traders,<br>Building <span class="text-accent">Community</span></h1>
-                <p>The Next Gen Management & Trade Association is dedicated to fostering growth, transparency, and unity
+                <p>The New Market Traders Association is dedicated to fostering growth, transparency, and unity
                     among the business community of Pakyong.</p>
                 <div class="hero-btns">
                     <a href="#about" class="btn btn-primary">Discover More</a>
@@ -115,6 +115,44 @@
                         <h3>Geeta Poudyal</h3>
                         <div class="role">President, NMTA</div>
                     </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Vision & Future Goals Section -->
+        <section id="vision" class="vision-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Our Vision & Future Goals</h2>
+                    <p>Building a stronger, healthier, and more prosperous business community in Pakyong.</p>
+                </div>
+                <div class="vision-grid">
+
+
+                    <div class="vision-card">
+                        <div class="icon-box"><i class="fa-solid fa-briefcase"></i></div>
+                        <h3>Business Workshops</h3>
+                        <p>Workshops and training sessions to strengthen business knowledge, skillsets, and market
+                            competitiveness.</p>
+                    </div>
+                    <div class="vision-card">
+                        <div class="icon-box"><i class="fa-solid fa-shield-alt"></i></div>
+                        <h3>Corporate Insurance</h3>
+                        <p>Providing insurance options and financial protection for members’ businesses and assets.</p>
+                    </div>
+                    <div class="vision-card">
+                        <div class="icon-box"><i class="fa-solid fa-camera"></i></div>
+                        <h3>Shop Security</h3>
+                        <p>Mandating CCTV installation for all member shops to enhance security and prevent losses.</p>
+                    </div>
+                    <div class="vision-card">
+                        <div class="icon-box"><i class="fa-solid fa-coins"></i></div>
+                        <h3>Financial Support</h3>
+                        <p>Providing low-interest loans (10%) to members and collective fundraising for emergencies or
+                            expansion.</p>
+                    </div>
+
                 </div>
             </div>
         </section>
@@ -240,15 +278,84 @@
             </div>
         </section>
 
+        <!-- Event Planner Section -->
+        <section id="events" class="events-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Upcoming Events & Planner</h2>
+                    <p>Stay updated with NMTA's scheduled events, meetings, and activities.</p>
+                </div>
+                <div class="events-grid">
+                    <!-- Example Event Card -->
+                    <div class="event-card">
+                        <div class="event-date">
+                            <span class="day">12</span>
+                            <span class="month">Dec</span>
+                        </div>
+                        <div class="event-details">
+                            <h3>Monthly Traders Meeting</h3>
+                            <p>Location: NMTA Hall, New Market</p>
+                            <p>Time: 10:00 AM - 1:00 PM</p>
+                        </div>
+                    </div>
+
+                    <div class="event-card">
+                        <div class="event-date">
+                            <span class="day">25</span>
+                            <span class="month">Dec</span>
+                        </div>
+                        <div class="event-details">
+                            <h3>End-of-Year Community Gathering</h3>
+                            <p>Location: Community Center, Pakyong</p>
+                            <p>Time: 5:00 PM - 9:00 PM</p>
+                        </div>
+                    </div>
+
+                    <div class="event-card">
+                        <div class="event-date">
+                            <span class="day">10</span>
+                            <span class="month">Jan</span>
+                        </div>
+                        <div class="event-details">
+                            <h3>Business Workshop</h3>
+                            <p>Location: NMTA Hall</p>
+                            <p>Time: 9:30 AM - 12:30 PM</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
         <!-- CTA Section -->
         <section class="cta-section">
             <div class="container cta-content">
                 <h2>Ready to Join the Community?</h2>
                 <p>Become a part of NMTA today and contribute to the growth and welfare of our trading community.</p>
-                <a href="#contact" class="btn btn-outline" style="border-color: white; color: white;">Contact Us
-                    Today</a>
+                <button id="contact-us-btn" class="btn btn-outline" style="border-color: white; color: white;">
+                    Contact Us Today
+                </button>
             </div>
         </section>
+
+        <!-- Contact Form Modal -->
+        <div id="contact-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-btn">&times;</span>
+                <h2>Contact Us</h2>
+                <form id="contact-form">
+                    <input type="text" name="name" placeholder="Your Name" required>
+                    <input type="email" name="email" placeholder="Your Email" required>
+                    <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
+                    <button type="submit" class="btn btn-primary">Send Message</button>
+                </form>
+                <div id="form-status" style="margin-top:1rem; font-weight:500; color: green;"></div>
+            </div>
+        </div>
+
+
+
+
     </main>
 
     <!-- Footer -->
@@ -297,6 +404,56 @@
     <script src="js/main.js"></script>
     <script src="js/nav.js"></script>
     <script src="js/gallery.min.js"></script>
+    <script src="js/indexModal.js"></script>
+
+    <script>
+        const contactBtn = document.getElementById('contact-us-btn');
+        const modal = document.getElementById('contact-modal');
+        const closeBtn = modal.querySelector('.close-btn');
+        const form = document.getElementById('contact-form');
+        const status = document.getElementById('form-status');
+
+        // Open/Close modal
+        contactBtn.addEventListener('click', () => modal.style.display = 'flex');
+        closeBtn.addEventListener('click', () => modal.style.display = 'none');
+        window.addEventListener('click', e => { if (e.target == modal) modal.style.display = 'none'; });
+
+        // Handle form submission
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            status.style.color = 'black';
+            status.textContent = 'Sending...';
+
+            const formData = {
+                name: form.name.value,
+                email: form.email.value,
+                message: form.message.value
+            };
+
+            try {
+                const res = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    form.reset();
+                    status.style.color = 'green';
+                    status.textContent = '✅ Thank you! Our executives will contact you soon.';
+                } else {
+                    status.style.color = 'red';
+                    status.textContent = '❌ Failed to send. Please try again.';
+                }
+            } catch (err) {
+                console.error(err);
+                status.style.color = 'red';
+                status.textContent = '❌ Something went wrong. Try again later.';
+            }
+        });
+    </script>
+
 </body>
 
 </html>

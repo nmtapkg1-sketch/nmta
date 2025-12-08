@@ -10,21 +10,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('searchInput');
     const printHistoryBtn = document.getElementById('printHistoryBtn');
 
+    const yearFilter = document.getElementById('yearFilter');
+    const monthFilter = document.getElementById('monthFilter');
+    const totalAmountBox = document.getElementById('totalAmount');
+
     const API_URL = '/api/financial_history';
     const MEMBERS_API_URL = '/api/members';
 
     let membersList = [];
     let financialRecords = [];
 
-    // Fetch members for dropdown
+    // ================= FETCH MEMBERS =================
     async function fetchMembers() {
         try {
             const response = await fetch(MEMBERS_API_URL);
             membersList = await response.json();
             populateMemberSelect(membersList);
         } catch (error) {
-            console.error('Error fetching members:', error);
-            Swal.fire('Error', 'Failed to load members list', 'error');
+            Swal.fire("Error", "Failed to load members", "error");
         }
     }
 
@@ -32,272 +35,216 @@ document.addEventListener('DOMContentLoaded', () => {
         memberSelect.innerHTML = '<option value="">-- Select a Member --</option>';
         members.forEach(member => {
             const option = document.createElement('option');
-            option.value = member.name; // Using name as value since that's what we store
-            option.textContent = `${member.name} (${member.shopno || 'No Shop'})`;
-            option.dataset.memberId = member.id;
+            option.value = member.name;
+            option.textContent = `${member.name} (${member.shopno || "No Shop"})`;
             memberSelect.appendChild(option);
         });
     }
 
-    // Handle member selection
-    memberSelect.addEventListener('change', (e) => {
-        const selectedName = e.target.value;
-        if (selectedName) {
-            nameInput.value = selectedName;
-        } else {
-            nameInput.value = '';
-        }
+    memberSelect.addEventListener('change', e => {
+        nameInput.value = e.target.value || "";
     });
 
-    // Search functionality
-    searchInput.addEventListener('input', (e) => {
-        const searchTerm = e.target.value.toLowerCase();
-        filterRecords(searchTerm);
-    });
+    // ================= SEARCH =================
+    searchInput.addEventListener('input', applyAllFilters);
 
-    function filterRecords(searchTerm) {
-        if (!searchTerm) {
-            renderTable(financialRecords);
-            return;
-        }
+    // ================= YEAR & MONTH FILTER =================
+    yearFilter.addEventListener('change', applyAllFilters);
+    monthFilter.addEventListener('change', applyAllFilters);
 
-        const filtered = financialRecords.filter(record =>
-            record.name.toLowerCase().includes(searchTerm) ||
-            record.receiptNo.toLowerCase().includes(searchTerm) ||
-            record.date.includes(searchTerm) ||
-            (record.remarks && record.remarks.toLowerCase().includes(searchTerm))
-        );
-        renderTable(filtered);
-    }
+    // ================= PRINT =================
+    printHistoryBtn.addEventListener('click', () => window.print());
 
-    // Print functionality
-    printHistoryBtn.addEventListener('click', () => {
-        window.print();
-    });
-
-    // Fetch and display records
+    // ================= FETCH RECORDS =================
     async function fetchRecords() {
         try {
             const response = await fetch(API_URL);
-            const data = await response.json();
-            financialRecords = data; // Store records globally
-            renderTable(data);
+            financialRecords = await response.json();
+            applyAllFilters(); // render with filters applied
         } catch (error) {
-            console.error('Error fetching records:', error);
-            tableBody.innerHTML = '<tr><td colspan="8" class="text-center">Error loading records</td></tr>';
+            tableBody.innerHTML = `<tr><td colspan="8">Error loading records</td></tr>`;
         }
     }
 
+    // ================= TOTAL AMOUNT =================
+    function updateTotal(records) {
+        const total = records.reduce((sum, r) => sum + Number(r.amount || 0), 0);
+        totalAmountBox.textContent = "₹ " + total.toLocaleString();
+    }
+
+    // ================= FILTER + SEARCH COMBINED =================
+    function applyAllFilters() {
+        let filtered = [...financialRecords];
+
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        const yearVal = yearFilter.value;
+        const monthVal = monthFilter.value;
+
+        filtered = filtered.filter(r => {
+            const matchSearch =
+                !searchTerm ||
+                r.name.toLowerCase().includes(searchTerm) ||
+                r.receiptNo.toLowerCase().includes(searchTerm) ||
+                (r.amount && r.amount.toString().includes(searchTerm)) ||
+                (r.fortheMonth && r.fortheMonth.toLowerCase().includes(searchTerm));
+
+            const matchYear = !yearVal || r.date.startsWith(yearVal);
+            const matchMonth = !monthVal || r.date.split("-")[1] === monthVal.padStart(2, "0");
+
+            return matchSearch && matchYear && matchMonth;
+        });
+
+        renderTable(filtered);
+        updateTotal(filtered);
+    }
+
+    // ================= TABLE RENDERING =================
     function renderTable(records) {
-        tableBody.innerHTML = '';
+        tableBody.innerHTML = "";
+
         if (records.length === 0) {
-            tableBody.innerHTML = '<tr><td colspan="8" class="text-center">No records found</td></tr>';
+            tableBody.innerHTML = `<tr><td colspan="8">No records found</td></tr>`;
             return;
         }
 
         records.forEach(record => {
-            const row = document.createElement('tr');
+            const row = document.createElement("tr");
             row.innerHTML = `
                 <td>${record.id}</td>
-                <td><span style="font-weight: 500;">${record.name}</span></td>
+                <td><b>${record.name}</b></td>
                 <td>${record.receiptNo}</td>
                 <td>${record.date}</td>
                 <td>₹${record.amount}</td>
-                <td>${record.fortheMonth || '-'}</td>
-                <td>${record.remarks || '-'}</td>
+                <td>${record.fortheMonth || "-"}</td>
+                <td>${record.remarks || "-"}</td>
                 <td class="actions">
-                    <button type="button" class="btn btn-sm btn-edit edit-btn" data-id="${record.id}"><i class="fa-solid fa-pen"></i></button>
-                    <button type="button" class="btn btn-sm btn-delete delete-btn" data-id="${record.id}"><i class="fa-solid fa-trash"></i></button>
-                    <button type="button" class="btn btn-sm btn-receipt receipt-btn" onclick="generateReceipt('${record.name}', '${record.receiptNo}', '${record.date}', '${record.amount}', '${record.fortheMonth}', '${record.remarks}')"><i class="fa-solid fa-print"></i></button>
+                    <button class="btn btn-sm btn-edit edit-btn" data-id="${record.id}">
+                        <i class="fa-solid fa-pen"></i>
+                    </button>
+                    <button class="btn btn-sm btn-delete delete-btn" data-id="${record.id}">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                    <button class="btn btn-sm btn-receipt receipt-btn"
+                        onclick="generateReceipt('${record.name}', '${record.receiptNo}', '${record.date}', '${record.amount}', '${record.fortheMonth}', '${record.remarks}')">
+                        <i class="fa-solid fa-print"></i>
+                    </button>
                 </td>
             `;
             tableBody.appendChild(row);
         });
 
-        // Attach event listeners
-        document.querySelectorAll('.edit-btn').forEach(btn => {
-            btn.addEventListener('click', () => openEditModal(btn.dataset.id));
-        });
-        document.querySelectorAll('.delete-btn').forEach(btn => {
-            btn.addEventListener('click', () => deleteRecord(btn.dataset.id));
-        });
+        document.querySelectorAll(".edit-btn").forEach(btn =>
+            btn.addEventListener("click", () => openEditModal(btn.dataset.id))
+        );
+
+        document.querySelectorAll(".delete-btn").forEach(btn =>
+            btn.addEventListener("click", () => deleteRecord(btn.dataset.id))
+        );
     }
 
-    // Modal handling
-    function openModal() {
-        modal.classList.add('active');
-    }
-
+    // ================= MODAL HANDLING =================
+    function openModal() { modal.classList.add("active"); }
     function closeModal() {
-        modal.classList.remove('active');
+        modal.classList.remove("active");
         form.reset();
-        document.getElementById('record-id').value = '';
+        document.getElementById("record-id").value = "";
     }
+    cancelBtn.addEventListener("click", closeModal);
+
+    modal.addEventListener("click", e => {
+        if (e.target === modal) closeModal();
+    });
 
     addBtn.addEventListener('click', () => {
-        modalTitle.textContent = 'Add Record';
-        // Set default date to today
-        document.getElementById('date').valueAsDate = new Date();
-
-        // Auto-generate receipt number
-        const nextReceiptNo = getNextReceiptNo();
-        document.getElementById('receiptNo').value = nextReceiptNo;
-
+        modalTitle.textContent = "Add Record";
+        document.getElementById("date").valueAsDate = new Date();
+        document.getElementById("receiptNo").value = getNextReceiptNo();
         openModal();
     });
 
     function getNextReceiptNo() {
-        if (!financialRecords || financialRecords.length === 0) {
-            return 1001; // Start from 1001 if no records
-        }
-
-        let maxReceiptNo = 0;
-        financialRecords.forEach(record => {
-            // Remove any non-numeric characters if present (e.g. "REC-1001")
-            // This is a simple implementation assuming mostly numeric receipt numbers
-            const num = parseInt(record.receiptNo.replace(/\D/g, ''));
-            if (!isNaN(num) && num > maxReceiptNo) {
-                maxReceiptNo = num;
-            }
-        });
-
-        return maxReceiptNo > 0 ? maxReceiptNo + 1 : 1001;
+        if (financialRecords.length === 0) return 1001;
+        let max = Math.max(...financialRecords.map(r => parseInt(r.receiptNo.replace(/\D/g, ""))));
+        return (isNaN(max) ? 1001 : max + 1);
     }
 
-    cancelBtn.addEventListener('click', closeModal);
-
-    // Close modal on outside click
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) closeModal();
-    });
-
-    // Form submission
-    form.addEventListener('submit', async (e) => {
+    // ================= SAVE RECORD =================
+    form.addEventListener('submit', async e => {
         e.preventDefault();
-        const id = document.getElementById('record-id').value;
+
+        const id = document.getElementById("record-id").value;
         const formData = {
-            name: document.getElementById('name').value,
-            receiptNo: document.getElementById('receiptNo').value,
-            date: document.getElementById('date').value,
-            amount: document.getElementById('amount').value,
-            fortheMonth: document.getElementById('fortheMonth').value,
-            remarks: document.getElementById('remarks').value
+            name: document.getElementById("name").value,
+            receiptNo: document.getElementById("receiptNo").value,
+            date: document.getElementById("date").value,
+            amount: document.getElementById("amount").value,
+            fortheMonth: document.getElementById("fortheMonth").value,
+            remarks: document.getElementById("remarks").value
         };
 
-        try {
-            const method = id ? 'PUT' : 'POST';
-            const url = id ? `${API_URL}/${id}` : API_URL;
+        const method = id ? "PUT" : "POST";
+        const url = id ? `${API_URL}/${id}` : API_URL;
 
-            const response = await fetch(url, {
-                method: method,
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            });
+        const response = await fetch(url, {
+            method,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formData)
+        });
 
-            if (response.ok) {
-                closeModal();
-                fetchRecords();
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: 'Record saved successfully',
-                    timer: 1500,
-                    showConfirmButton: false
-                });
-            } else {
-                console.error('Error saving record');
-                Swal.fire('Error', 'Failed to save record', 'error');
-            }
-        } catch (error) {
-            console.error('Error saving record:', error);
-            Swal.fire('Error', 'An error occurred. Please check console.', 'error');
-        }
+        if (response.ok) {
+            closeModal();
+            fetchRecords();
+            Swal.fire("Success", "Record saved", "success");
+        } else Swal.fire("Error", "Failed to save record", "error");
     });
 
-    // Edit record
+    // ================= LOAD EDIT FORM =================
     async function openEditModal(id) {
-        try {
-            const response = await fetch(`${API_URL}/${id}`);
-            const record = await response.json();
+        const response = await fetch(`${API_URL}/${id}`);
+        const record = await response.json();
 
-            document.getElementById('record-id').value = record.id;
-            document.getElementById('name').value = record.name;
-            document.getElementById('receiptNo').value = record.receiptNo;
-            document.getElementById('date').value = record.date;
-            document.getElementById('amount').value = record.amount;
-            document.getElementById('fortheMonth').value = record.fortheMonth;
-            document.getElementById('remarks').value = record.remarks;
+        document.getElementById("record-id").value = record.id;
+        document.getElementById("name").value = record.name;
+        memberSelect.value = record.name;
+        document.getElementById("receiptNo").value = record.receiptNo;
+        document.getElementById("date").value = record.date;
+        document.getElementById("amount").value = record.amount;
+        document.getElementById("fortheMonth").value = record.fortheMonth;
+        document.getElementById("remarks").value = record.remarks;
 
-            // Set the dropdown value based on the name
-            // This assumes names are unique enough or we just match by name string
-            memberSelect.value = record.name;
-
-            // If name doesn't match any option (e.g. deleted member), we might want to handle that
-            // But for now, if it's not in the list, the dropdown will show "Select Member" 
-            // while the readonly input still shows the correct name.
-            // To ensure the dropdown reflects "custom" or "legacy" names, we could add a temporary option,
-            // but the requirement is to fetch from DB.
-
-            modalTitle.textContent = 'Edit Record';
-            openModal();
-        } catch (error) {
-            console.error('Error fetching record details:', error);
-            Swal.fire('Error', 'Could not fetch record details', 'error');
-        }
+        modalTitle.textContent = "Edit Record";
+        openModal();
     }
 
-    // Delete record
+    // ================= DELETE =================
     async function deleteRecord(id) {
         const result = await Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#ef4444',
-            cancelButtonColor: '#cbd5e1',
-            confirmButtonText: 'Yes, delete it!'
+            title: "Delete?",
+            text: "This cannot be undone",
+            icon: "warning",
+            showCancelButton: true
         });
 
         if (result.isConfirmed) {
-            try {
-                const response = await fetch(`${API_URL}/${id}`, {
-                    method: 'DELETE'
-                });
-
-                if (response.ok) {
-                    await Swal.fire(
-                        'Deleted!',
-                        'Record has been deleted.',
-                        'success'
-                    );
-                    fetchRecords();
-                } else {
-                    console.error('Error deleting record');
-                    Swal.fire('Error', 'Failed to delete record', 'error');
-                }
-            } catch (error) {
-                console.error('Error deleting record:', error);
-                Swal.fire('Error', 'An error occurred while deleting', 'error');
+            const response = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+            if (response.ok) {
+                Swal.fire("Deleted", "", "success");
+                fetchRecords();
             }
         }
     }
 
-    // Initial fetch
+    // Initial load
     fetchMembers();
     fetchRecords();
 });
 
-// Make generateReceipt global so onclick works
+// Global receipt generator
 window.generateReceipt = function (name, receiptNo, date, amount, fortheMonth, remarks) {
     const params = new URLSearchParams({
-        name,
-        receiptNo,
-        date,
-        amount,
-        fortheMonth: fortheMonth || '',
-        remarks: remarks || ''
+        name, receiptNo, date, amount,
+        fortheMonth: fortheMonth || "",
+        remarks: remarks || ""
     });
-    window.open(`receipt.html?${params.toString()}`, '_blank');
+    window.open(`receipt.html?${params.toString()}`, "_blank");
 };

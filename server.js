@@ -204,6 +204,54 @@ app.get('/oauth2callback', async (req, res) => {
     }
 });
 
+
+// ----------- contact us form -----------
+// ---------- Contact Form API using Gmail API ----------
+app.post('/api/contact', async (req, res) => {
+    const { name, email, message } = req.body;
+
+    if (!name || !email || !message) {
+        return res.status(400).json({ success: false, error: 'All fields are required.' });
+    }
+
+    try {
+        const gmail = google.gmail({ version: 'v1', auth: oAuth2Client });
+
+        const subject = `New Contact Form Message from ${name}`;
+        const utf8Subject = `=?utf-8?B?${Buffer.from(subject).toString('base64')}?=`;
+        const emailBody = [
+            `From: ${name} <${email}>`,
+            `To: ${process.env.EMAIL_ADDRESS}`,
+            `Subject: ${utf8Subject}`,
+            'MIME-Version: 1.0',
+            'Content-Type: text/html; charset=utf-8',
+            '',
+            `<p><strong>Name:</strong> ${name}</p>
+             <p><strong>Email:</strong> ${email}</p>
+             <p><strong>Message:</strong><br>${message}</p>`
+        ].join('\n');
+
+        const encodedMessage = Buffer.from(emailBody)
+            .toString('base64')
+            .replace(/\+/g, '-')
+            .replace(/\//g, '_')
+            .replace(/=+$/, '');
+
+        const result = await gmail.users.messages.send({
+            userId: 'me',
+            requestBody: { raw: encodedMessage }
+        });
+
+        console.log('✅ Contact email sent. Message ID:', result.data.id);
+        res.json({ success: true, message: 'Your message has been sent successfully!' });
+
+    } catch (error) {
+        console.error('❌ Error sending contact email:', error);
+        res.status(500).json({ success: false, error: 'Failed to send email. Please try again later.' });
+    }
+});
+
+
 // ---------- Start Server ----------
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
