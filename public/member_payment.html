@@ -173,12 +173,31 @@
 
                     <div class="form-group">
                         <label for="amount">Amount (₹)</label>
-                        <input type="number" id="amount" step="0.01" required placeholder="Enter amount">
+                        <select id="amount">
+                            <option value="200">Monthly - 200</option>
+                            <option value="600">Quaterly - 600</option>
+                            <option value="1200">Half-Yearly - 1200</option>
+                            <option value="2400">Yearly - 2400</option>
+                        </select>
                     </div>
 
                     <div class="form-group">
                         <label for="fortheMonth">Payment For (Month/Year)</label>
-                        <input type="text" id="fortheMonth" required placeholder="e.g., January 2025">
+                        <select id="fortheMonth">
+                            <option value="January">January</option>
+                            <option value="February">February</option>
+                            <option value="March">March</option>
+                            <option value="April">April</option>
+                            <option value="May">May</option>
+                            <option value="June">June</option>
+                            <option value="July">July</option>
+                            <option value="August">August</option>
+                            <option value="September">September</option>
+                            <option value="October">October</option>
+                            <option value="November">November</option>
+                            <option value="December">December</option>
+
+                        </select>
                     </div>
 
                     <div class="form-group">
@@ -222,8 +241,8 @@
 
     <!-- Add this in the <head> section -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="js/member_payment.js"></script>
-    <script src="js/nav.js"></script>
+    <script src="js/min/member_payment.js"></script>
+    <script src="js/min/nav.js"></script>
 </body>
 
 </html>

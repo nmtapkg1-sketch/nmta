@@ -23,6 +23,7 @@ data/
 # Test files
 test_api.js
 test_email.js
+token.js
 
 # Uploads folder
 uploads/
@@ -52,3 +53,4 @@ Thumbs.db
 tmp/
 temp/
 *.tmp
+

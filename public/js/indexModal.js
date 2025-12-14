@@ -27,10 +27,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    let isSubmitting = false;
+
     // Submit Form
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        statusDiv.textContent = 'Sending...';
+
+        if (isSubmitting) return;
+        isSubmitting = true;
+
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalBtnText = submitBtn.textContent;
+
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
+        statusDiv.textContent = '';
+        statusDiv.className = '';
+
         const formData = new FormData(form);
         const data = Object.fromEntries(formData.entries());
 
@@ -41,20 +54,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify(data),
             });
 
-            if (!response.ok) throw new Error('Failed to send message');
+            const result = await response.json();
 
-            statusDiv.style.color = 'green';
-            statusDiv.textContent = 'Message sent successfully!';
+            if (!result.success) throw new Error(result.error || 'Failed to send message');
+
+            statusDiv.className = 'status-success';
+            statusDiv.innerHTML = '<i class="fa-solid fa-check-circle"></i> Message sent successfully!';
             form.reset();
 
             setTimeout(() => {
                 modal.style.display = 'none';
                 clearStatus();
-            }, 2000);
+            }, 3000);
+
         } catch (err) {
             console.error(err);
-            statusDiv.style.color = 'red';
-            statusDiv.textContent = 'Failed to send message. Please try again.';
+            statusDiv.className = 'status-error';
+            statusDiv.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${err.message || 'Failed to send message.'}`;
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalBtnText;
+            isSubmitting = false;
         }
     });
 

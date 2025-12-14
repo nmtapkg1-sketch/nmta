@@ -70,6 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const option = document.createElement('option');
                 option.value = member.name;
                 option.textContent = `${member.name} (${member.shopno || 'No Shop'})`;
+                option.dataset.email = member.emailid || ''; // Store email in dataset
                 memberSelect.appendChild(option);
             });
         } catch (error) {
@@ -359,16 +360,26 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        // Show loading state
+        // Show loading state and disable inputs
         payBtn.disabled = true;
+
+        // Disable all form inputs
+        const formInputs = form.querySelectorAll('input, select, textarea');
+        formInputs.forEach(input => input.disabled = true);
+
         btnText.style.display = 'none';
         loader.style.display = 'block';
 
         // Simulate payment processing (2 seconds)
         setTimeout(async () => {
             const now = new Date();
+            // Get selected member email
+            const selectedOption = memberSelect.options[memberSelect.selectedIndex];
+            const memberEmail = selectedOption ? selectedOption.dataset.email : '';
+
             const paymentData = {
                 name: nameInput.value,
+                email: memberEmail, // Add email to data
                 receiptNo: receiptInput.value,
                 date: now.toLocaleDateString('en-IN', {
                     day: '2-digit',
@@ -425,6 +436,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Payment error:', error);
                 Swal.fire('Error', 'Payment recording failed. Please contact support.', 'error');
 
+                // Re-enable inputs if error
+                formInputs.forEach(input => input.disabled = false);
+
                 // Reset button
                 payBtn.disabled = false;
                 btnText.style.display = 'block';
@@ -444,7 +458,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Email Notification Function using Backend API
     async function sendEmailNotification(data) {
-        console.log('Sending Email via Backend...');
+
 
         const emailBody = `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; padding: 20px; background-color: #ffffff;">
@@ -496,6 +510,7 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
 
         const emailData = {
+            to: data.email, // Send to member (server will BCC admin)
             subject: `Payment Received: ${data.receiptNo} - ${data.name}`,
             body: emailBody
         };
@@ -510,7 +525,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (response.ok) {
-                console.log('Email sent successfully!');
                 const Toast = Swal.mixin({
                     toast: true,
                     position: 'top-end',

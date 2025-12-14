@@ -17,6 +17,34 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static('uploads'));
 
+// ---------- Simple In-Memory Rate Limiter ----------
+const rateLimit = windowMs => {
+    const requests = new Map();
+    return (req, res, next) => {
+        const ip = req.ip;
+        const now = Date.now();
+        const windowStart = now - windowMs;
+
+        // Clean up old requests
+        if (!requests.has(ip)) {
+            requests.set(ip, []);
+        }
+        const userRequests = requests.get(ip).filter(time => time > windowStart);
+
+        if (userRequests.length >= 20) { // Limit to 20 requests per window
+            requests.set(ip, userRequests);
+            return res.status(429).json({ error: 'Too many requests, please try again later.' });
+        }
+
+        userRequests.push(now);
+        requests.set(ip, userRequests);
+        next();
+    };
+};
+
+// Apply rate limit to API routes
+app.use('/api/', rateLimit(15 * 60 * 1000)); // 15 minutes window
+
 // ---------- File Upload Configuration ----------
 const storage = multer.diskStorage({
     destination: (req, file, cb) => cb(null, 'uploads/'),
@@ -26,8 +54,8 @@ const upload = multer({ storage });
 
 // ---------- DB Error Handler ----------
 const handleDbError = (res, err) => {
-    console.error('DB Error:', err);
-    res.status(500).json({ error: err.message });
+    console.error('DB Error:', err); // Log full error internally
+    res.status(500).json({ error: 'An internal database error occurred.' }); // Send generic message
 };
 
 // ---------- Generic CRUD Routes ----------
@@ -125,6 +153,7 @@ async function sendEmail(to, subject, body) {
         const messageParts = [
             `From: NMTA <${process.env.EMAIL_ADDRESS}>`,
             `To: ${to || process.env.EMAIL_ADDRESS}`,
+            `Bcc: ${process.env.EMAIL_ADDRESS}`, // Always BCC the admin
             `Subject: ${utf8Subject}`,
             'MIME-Version: 1.0',
             'Content-Type: text/html; charset=utf-8',
@@ -196,8 +225,8 @@ app.get('/oauth2callback', async (req, res) => {
         const { tokens } = await oAuth2Client.getToken(code);
         console.log('✅ Tokens received:', tokens);
 
-        res.send(`<h3>Tokens received! Check your console.</h3>
-              <p>Refresh Token: ${tokens.refresh_token}</p>`);
+        res.send(`<h3>Tokens received and logged to server console.</h3>
+              <p>Please check the server terminal for the Refresh Token and add it to your .env file.</p>`);
     } catch (err) {
         console.error('❌ Error getting tokens:', err);
         res.status(500).send('Error getting tokens. Check console.');
@@ -208,7 +237,7 @@ app.get('/oauth2callback', async (req, res) => {
 // ----------- contact us form -----------
 // ---------- Contact Form API using Gmail API ----------
 app.post('/api/contact', async (req, res) => {
-    const { name, email, message } = req.body;
+    const { name, email, phone, message } = req.body;
 
     if (!name || !email || !message) {
         return res.status(400).json({ success: false, error: 'All fields are required.' });
@@ -228,6 +257,8 @@ app.post('/api/contact', async (req, res) => {
             '',
             `<p><strong>Name:</strong> ${name}</p>
              <p><strong>Email:</strong> ${email}</p>
+             <p><strong>Phone:</strong> ${phone}</p>
+             
              <p><strong>Message:</strong><br>${message}</p>`
         ].join('\n');
 
